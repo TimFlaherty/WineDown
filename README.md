@@ -2,7 +2,7 @@ Instructions
 
 1. Clone the project:
 ```
-$> git clone https://github.com/TimFLaherty/node-mysql-starter
+$> git clone https://github.com/TimFlaherty/WineDown
 ```
 
 2. cd in to the 'node-mysql-starter' directory and install modules:
