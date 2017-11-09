@@ -1,0 +1,28 @@
+html,body {
+	margin:0;
+	padding:0;
+}
+
+h3 {
+	font-size:.85em;
+}
+h3,h4 {
+	white-space:nowrap;
+	float:left;
+	margin:2px;
+	padding:0;
+}
+#copy {
+	right:-4px;
+}
+#map {
+	position:absolute;
+	top:22px;
+	left:0;
+	right:0;
+	bottom:0;
+	border:none;
+	border-top:1px solid #1978cf;
+	height:auto;
+	width:auto;
+}

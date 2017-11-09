@@ -1,0 +1,46 @@
+-- db_create.sql
+
+DROP DATABASE IF EXISTS winedown;
+
+CREATE DATABASE winedown;
+
+USE winedown;
+
+CREATE TABLE winery (
+wineryid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT PRIMARY KEY,
+wineryname VARCHAR(40) NOT NULL,
+lat DECIMAL(10, 8),
+lng DECIMAL(11, 8),
+address VARCHAR(256) NOT NULL,
+hours VARCHAR(256),
+url VARCHAR(2083),
+phone VARCHAR(15)
+);
+
+CREATE TABLE wine (
+wineid INT(7) ZEROFILL NOT NULL AUTO_INCREMENT PRIMARY KEY,
+wineryid INT(6) ZEROFILL NOT NULL,
+winename VARCHAR(50) NOT NULL,
+vintage INT(4),
+varietal VARCHAR(25),
+FOREIGN KEY (wineryid) REFERENCES winery(wineryid)
+);
+
+CREATE TABLE usr (
+uid INT(8) ZEROFILL NOT NULL AUTO_INCREMENT PRIMARY KEY,
+uname VARCHAR(25) NOT NULL,
+pwd VARCHAR(25),
+email VARCHAR(256)
+);
+
+CREATE TABLE review (
+reviewid INT(9) ZEROFILL NOT NULL AUTO_INCREMENT PRIMARY KEY,
+wineid INT(7) ZEROFILL NOT NULL,
+wineryid INT(6) ZEROFILL NOT NULL,
+uid INT(8) ZEROFILL NOT NULL,
+rating INT(1) NOT NULL,
+narrative VARCHAR(256),
+FOREIGN KEY (wineid) REFERENCES wine(wineid),
+FOREIGN KEY (wineryid) REFERENCES winery(wineryid),
+FOREIGN KEY (uid) REFERENCES usr(uid)
+);

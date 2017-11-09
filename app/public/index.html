@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WineDown</title> 
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	<link rel="stylesheet" href="lib/leaflet-search.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+			background: #222222; 
+			font-family: 'Roboto', sans-serif;
+		}
+		html, body, #map {
+			height: 100%;
+			width: 100vw;
+		}
+	</style>
+
+
+</head>
+
+<body>
+	<div id="map" style="height:100%; width:100%"></div>
+	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBHxLxifPq-0zZ9bnZXQjjfPcmtawXwhJg"></script>
+	<script src="http://labs.easyblog.it/maps/leaflet-search/dist/leaflet-search.min.js"></script>
+	<script>
+		// Declare OpenStreetMap tiles
+		const osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			id: 'OpenStreetMap.Mapnik',
+			//attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+		});
+		
+		// Declare Stamen Toner tiles (B&W)
+		const bw = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
+			//attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+			subdomains: 'abcd',
+			minZoom: 0,
+			maxZoom: 20,
+			ext: 'png'
+		});
+		
+		// Declare ESRI ArcGIS satellite tiles
+		const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+			//attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+		});	
+		
+		// Initialize global variable to store active tileset name
+		var tileset = osm;
+		// Declare map variable
+		var map;
+		
+		//Declare mapping function
+		function mapit() {
+			// Initialize map and center on Amador County (roughly)
+			map = L.map('map', {
+				center: [38.4, -120.8], 
+				zoom: 11,
+				layers: [sat, osm, bw]
+			});
+			
+			// Call baselayers
+			var baseLayers = {
+				"Satellite": sat,
+				"B&W": bw,
+				"OpenStreetMap": osm
+			};
+			
+			// Add layer control to map
+			L.control.layers(baseLayers).addTo(map);
+	
+			// LOCATION
+			function locate() {
+				// Find user location
+				map.locate({setView: true, maxZoom: 12});
+				
+				//Declare function to add pin at user location
+				function onLocationFound(e) {
+					L.marker(e.latlng).addTo(map)
+					.bindPopup("You are here");
+				}
+				
+				// Add location pin to map
+				map.on('locationfound', onLocationFound);
+			}
+			locate();
+			//locate();
+			
+			// WINERY PINS
+			// AJAX request to node server returns an array of winery data 
+			$.ajax({url: '/winerypins', 
+				type: 'get',
+				}).done(function (data) {
+				for (i=0;i<data.length;i++) {
+					// For each winery i, grab coordinates, drop a marker, and populate the marker data
+					var marker = L.marker([data[i].lat, data[i].lng]).addTo(map)
+						.bindPopup("<a href='winery?wineryid="+data[i].wineryid+"'><h3>"+data[i].wineryname+"</h3></a>"
+						+ "<b>Tasting Room Hours:</b><br>" 
+						+ data[i].hours
+						+ "<br><br><b>Varietals:</b><br>"
+						+ data[i].varietals	
+					);
+				};
+			});
+			
+			// MAP SEARCH FUNCTIONALITY
+			// Initialize Google maps geocoder
+			var geocoder = new google.maps.Geocoder();
+			
+			// API call to geocoder
+			function googleGeocoding(text, callResponse)
+			{
+				geocoder.geocode({address: text}, callResponse);
+			}
+			
+			// Format API response
+			function formatJSON(rawjson)
+			{
+				var json = {},
+					key, loc, disp = [];
+		
+				for(var i in rawjson)
+				{
+					key = rawjson[i].formatted_address;
+					loc = L.latLng( rawjson[i].geometry.location.lat(), rawjson[i].geometry.location.lng() );
+					json[ key ]= loc;	//key,value format
+				}
+		
+				return json;
+			}
+			
+			// Add search control to map
+			map.addControl( new L.Control.Search({
+					sourceData: googleGeocoding,
+					formatData: formatJSON,
+					markerLocation: true,
+					autoType: false,
+					autoCollapse: true,
+					minLength: 2
+				}) 
+			);
+		}
+		
+		//Call map function
+		mapit();
+		
+	</script>
+</body>
+</html>
