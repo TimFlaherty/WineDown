@@ -18,3 +18,17 @@ INSERT INTO wine (wineryid, winename, vintage, varietal) VALUES
 (000003, '2013 Cabernet Sauvignon', 2013, 'Cabernet Sauvignon'),
 (000003, '2013 Estate Zinfandel', 2013, 'Zinfandel')
 ;
+
+INSERT INTO usr (uname, pwd, email) VALUES
+('User1', 'password', 'email@email.com'),
+('User2', 'password', 'user2@freemail.com')
+;
+
+INSERT INTO review (wineid, wineryid, uid, rating, narrative) VALUES
+(NULL, 000001, 00000001, 4, 'Had a lot of fun at this really cool winery!'),
+(NULL, 000001, 00000002, 5, 'Awesome winery! We will be back!'),
+(NULL, 000002, 00000002, 3, 'Great wine but the tasting room was a bit small'),
+(0000008, 000003, 00000001, 4, 'A delicious red'),
+(0000008, 000003, 00000002, 5, 'Great zinfandel!'),
+(0000005, 000002, 00000002, 5, 'My favorite white wine!')
+;
