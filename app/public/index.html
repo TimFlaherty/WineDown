@@ -6,26 +6,25 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-	<link rel="stylesheet" href="lib/leaflet-search.css" />
+	<link rel="stylesheet" href="lib/winedown.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<style>
-		body {
-			padding: 0;
-			margin: 0;
-			background: #222222; 
-			font-family: 'Roboto', sans-serif;
-		}
-		html, body, #map {
-			height: 100%;
-			width: 100vw;
-		}
-	</style>
-
-
 </head>
 
 <body>
-	<div id="map" style="height:100%; width:100%"></div>
+    <div id="navi">
+        <div id="logo" class="navitem">WD</div>
+        <div id="learn" class="navitem">Learn</div>
+        <div id="tasting" class="navitem">Tasting Notes</div>
+        <div id="help" class="navitem">Help</div>
+        <div id="login" class="navitem">Log In</div>
+    </div>
+    <div id="maptainer">
+        <div class="left">LEFT</div>
+        <div id="map"></div>
+        <div class="right">RIGHT</div>
+    </div>
+    <div id="footer">FOOTER</div>
+
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBHxLxifPq-0zZ9bnZXQjjfPcmtawXwhJg"></script>
 	<script src="http://labs.easyblog.it/maps/leaflet-search/dist/leaflet-search.min.js"></script>
@@ -35,23 +34,7 @@
 			id: 'OpenStreetMap.Mapnik',
 			//attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 		});
-		
-		// Declare Stamen Toner tiles (B&W)
-		const bw = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
-			//attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-			subdomains: 'abcd',
-			minZoom: 0,
-			maxZoom: 20,
-			ext: 'png'
-		});
-		
-		// Declare ESRI ArcGIS satellite tiles
-		const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-			//attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-		});	
-		
-		// Initialize global variable to store active tileset name
-		var tileset = osm;
+
 		// Declare map variable
 		var map;
 		
@@ -61,18 +44,10 @@
 			map = L.map('map', {
 				center: [38.4, -120.8], 
 				zoom: 11,
-				layers: [sat, osm, bw]
+				layers: [osm]
 			});
 			
-			// Call baselayers
-			var baseLayers = {
-				"Satellite": sat,
-				"B&W": bw,
-				"OpenStreetMap": osm
-			};
-			
-			// Add layer control to map
-			L.control.layers(baseLayers).addTo(map);
+			osm.addTo(map);
 	
 			// LOCATION
 			function locate() {
@@ -88,7 +63,7 @@
 				// Add location pin to map
 				map.on('locationfound', onLocationFound);
 			}
-			locate();
+			
 			//locate();
 			
 			// WINERY PINS
@@ -97,13 +72,25 @@
 				type: 'get',
 				}).done(function (data) {
 				for (i=0;i<data.length;i++) {
+					//If there is no winery rating available, display message
+					var rating = data[i].wineryrating;
+					if (rating == null) {
+						rating = "Be the first to review!";
+					}
+                    //If there is no varietal information available, display message
+					var varietals = data[i].varietals;
+					if (varietals == null) {
+						varietals = "Be the first to review!";
+					}
 					// For each winery i, grab coordinates, drop a marker, and populate the marker data
 					var marker = L.marker([data[i].lat, data[i].lng]).addTo(map)
 						.bindPopup("<a href='winery?wineryid="+data[i].wineryid+"'><h3>"+data[i].wineryname+"</h3></a>"
 						+ "<b>Tasting Room Hours:</b><br>" 
 						+ data[i].hours
-						+ "<br><br><b>Varietals:</b><br>"
-						+ data[i].varietals	
+						+ "<br><br><b>Popular Varietals:</b><br>"
+						+ varietals
+						+ "<br><br><b>WineDown Rating: </b><br>"
+						+ rating
 					);
 				};
 			});
