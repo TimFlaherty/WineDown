@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
-var connection = mysql.createConnection('mysql://yourusername:yourpassword@localhost/winedown');
+var connection = mysql.createConnection('mysql://username:password@localhost/winedown');
 
 //Declare app
 var app = express();
