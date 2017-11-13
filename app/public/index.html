@@ -7,16 +7,30 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 	<link rel="stylesheet" href="lib/winedown.css" />
+	<link rel="stylesheet" href="lib/modal.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 <body>
+	<script>
+	//Check if user logged in on page load
+		function logcheck(){
+			$.ajax({url: '/logcheck', 
+				type: 'get'
+			}).done(function (data) {
+				$("#login").html(data);
+			});
+		}
+			
+		logcheck();
+		
+	</script>
     <div id="navi">
         <div id="logo" class="navitem">WD</div>
         <div id="learn" class="navitem">Learn</div>
         <div id="tasting" class="navitem">Tasting Notes</div>
         <div id="help" class="navitem">Help</div>
-        <div id="login" class="navitem">Log In</div>
+        <div id="login" class="navitem"></div>
     </div>
     <div id="maptainer">
         <div class="left">LEFT</div>
@@ -24,11 +38,51 @@
         <div class="right">RIGHT</div>
     </div>
     <div id="footer">FOOTER</div>
+    
+    <!-- Modal Sign In Box, hidden by default -->
+    <div id="id01" class="modal">
+		<div class="modal-content animate">
+			<div class="modtainer">
+				<label><b>Username</b></label>
+				<input type="text" placeholder="Enter Username" id="uname" required>
+				
+				<label><b>Password</b></label>
+				<input type="password" placeholder="Enter Password" id="pwd" required>
+				<div id="addfield"></div>
+				<br><br>
+				<div id="modbutton"><button onclick="login()">Login</button></div>
+				<br>
+			</div>
+			<div id="resultmsg"></div>
+			<div class="modtainer" style="background-color:#f1f1f1">
+				<button type="button" onclick="modclose()" class="cancelbtn">Cancel</button>
+				<button type="button" onclick="create()" class="signup">Create Account</button>
+				<!--<span class="psw"><a href="#">Forgot password?</a></span>-->
+			</div>
+		</div>
+	</div>
 
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBHxLxifPq-0zZ9bnZXQjjfPcmtawXwhJg"></script>
 	<script src="http://labs.easyblog.it/maps/leaflet-search/dist/leaflet-search.min.js"></script>
-	<script>
+	<script>		
+		// Get the modal
+		var modal = document.getElementById('id01');
+		
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+		
+		function modclose() {
+			$('#id01').css('display','none');
+			$('#resultmsg').html('');
+			$('#addfield').html('');
+			$('#modbutton').html('<button onclick="login()">Log In</button>');
+		}
+	
 		// Declare OpenStreetMap tiles
 		const osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			id: 'OpenStreetMap.Mapnik',
@@ -135,6 +189,69 @@
 		
 		//Call map function
 		mapit();
+		
+		//User login function
+		function login(){
+			var name = $("#uname").val();
+			var pass = $("#pwd").val();
+			$.ajax({url: '/login', 
+				type: 'post',
+				data: {
+					uname: name,
+					pwd: pass
+				}
+			}).done(function (data) {
+				if(data == true) {
+					$("#login").html('<button style="width:auto;" onclick="logout()">Log Out</button>');
+					modclose();
+				} else {
+					$("#resultmsg").html(data);
+				}
+			});
+		}
+		
+		//User logout function
+		function logout(){
+			$.ajax({url: '/logout', 
+				type: 'get'
+			}).done(function (data) {
+				var btn = "document.getElementById('id01').style.display='block'";
+				$("#login").html('<button onclick="'+btn+'" style="width:auto;">Login</button>');
+			});
+		}
+		
+		//Displays user signup dialog in modal box
+		function create() {
+			$("#resultmsg").html('');
+			$("#addfield").html('<label><b>Email</b></label>'
+			+'<input type="text" placeholder="Enter Email" id="email" required>');
+			
+			$("#modbutton").html('<button onclick="signup()">Sign Up</button>');
+		}
+		
+		//User signup function
+		function signup(){
+			var name = $("#uname").val();
+			var pass = $("#pwd").val();
+			var mail = $("#email").val();
+			$.ajax({url: '/signup', 
+				type: 'post',
+				data: {
+					uname: name,
+					pwd: pass,
+					email: mail
+				}
+			}).done(function (data) {
+				if(data == true) {
+					$("#login").html('<button style="width:auto;" onclick="logout()">Log Out</button>');
+					window.alert('Welcome to WineDown!');
+					modclose();
+				} else {
+					$("#resultmsg").html(data);
+				}
+			});
+		}
+		
 		
 	</script>
 </body>
