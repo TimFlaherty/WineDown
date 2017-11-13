@@ -3,7 +3,7 @@ var serveStatic = require('serve-static');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var mysql = require('mysql');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt-nodejs');
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
 var connection = mysql.createConnection('mysql://username:password@localhost/winedown');
@@ -32,7 +32,7 @@ app.post('/signup', function (req, res) {
 	var uname = req.body.uname;
 	var pwd = req.body.pwd;
 	var email = req.body.email;
-	bcrypt.hash(pwd, 10, function(err, hash) {
+	bcrypt.hash(pwd, null, null, function(err, hash) {
 		connection.query('INSERT INTO usr(uname, pwd, email) VALUES ("'+uname+'", "'+hash+'", "'+email+'")', function(err, rows, fields) {
 			if (err) {
 				res.send('Username already taken, sorry!')
@@ -96,7 +96,8 @@ app.get('/winery', function (req, res) {
 app.use(express.static(__dirname + '/public'));
 
 //Serve to localhost:3000
-app.listen(3000);
+//app.listen(3000);
 
 //Serve to local network on port 8000:
 //app.listen(8000, 'your.local.ip.here');
+app.listen(8000, '192.168.0.3');
