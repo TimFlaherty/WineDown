@@ -12,6 +12,7 @@
 </head>
 
 <body>
+	<!-- AJAX call checks cookies to see if user is logged in -->
 	<script>
 	//Check if user logged in on page load
 		function logcheck(){
@@ -25,6 +26,9 @@
 		logcheck();
 		
 	</script>
+	<!-- Pre-load a loading GIF for AJAX calls but do not display --> 
+	<img src="lib/loading.gif" alt="Please wait..." style="display:none;">
+	
     <div id="navi">
         <div id="logo" class="navitem">WD</div>
         <div id="learn" class="navitem">Learn</div>
@@ -49,9 +53,8 @@
 				<label><b>Password</b></label>
 				<input type="password" placeholder="Enter Password" id="pwd" required>
 				<div id="addfield"></div>
-				<br><br>
-				<div id="modbutton"><button onclick="login()">Login</button></div>
 				<br>
+				<div id="modbutton"><button onclick="login()">Login</button></div>
 			</div>
 			<div id="resultmsg"></div>
 			<div class="modtainer" style="background-color:#f1f1f1">
@@ -192,6 +195,7 @@
 		
 		//User login function
 		function login(){
+			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
 			var name = $("#uname").val();
 			var pass = $("#pwd").val();
 			$.ajax({url: '/login', 
@@ -231,6 +235,7 @@
 		
 		//User signup function
 		function signup(){
+			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
 			var name = $("#uname").val();
 			var pass = $("#pwd").val();
 			var mail = $("#email").val();

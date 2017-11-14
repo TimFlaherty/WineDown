@@ -39,6 +39,7 @@ button:hover {
 #resultmsg {
 	margin:auto;
 	text-align:center;
+	padding:5px;
 }
 
 /* The Modal (background) */
