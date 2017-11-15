@@ -37,7 +37,8 @@ app.post('/signup', function (req, res) {
 			if (err) {
 				res.send('Username already taken, sorry!')
 			} else {
-				res.send(true);
+				var uid = rows.insertId;
+				res.cookie('winedown', {user:uid}).send(true);
 			}
 		});
 	});
@@ -53,7 +54,7 @@ app.post('/login', function (req, res) {
 		} else {
 			bcrypt.compare(pwd, rows[0].pwd, function(err, match) {
 				if (match == true) {
-					uid = rows[0].uid;
+					var uid = rows[0].uid;
 					res.cookie('winedown', {user:uid}).send(true);
 				} else {
 					res.send('Incorrect Password');
@@ -63,17 +64,18 @@ app.post('/login', function (req, res) {
 	});
 });
 
+//User logout deletes cookie
 app.get('/logout', function (req, res) {
 	res.clearCookie('winedown').send();
 });
 
+//Checks for user cookie and sends appropriate button
 app.get('/logcheck', function (req, res) {
 	var cookies = JSON.stringify(req.cookies);
 	if (cookies.includes('winedown')){
-		res.send('<button style="width:auto;" onclick="logout()">Log Out</button>');
+		res.send(true);
 	} else {
-		var btn = "document.getElementById('id01').style.display='block'";
-		res.send('<button onclick="'+btn+'" style="width:auto;">Login</button>');
+		res.send(false);
 	}
 });
 
@@ -92,12 +94,33 @@ app.get('/winery', function (req, res) {
 	});
 });
 
+//User reviews
+app.post('/review', function (req, res) {
+	var uid = req.cookies.winedown.user;
+	var wineid = req.body.wineid;
+	var wineryid = req.body.wineryid;
+	var rating = req.body.rating;
+	var narrative = req.body.narrative;
+	//Differentiate between wine and winery reviews
+	if (wineid == 'none') {
+		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative) VALUES (NULL, "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'")';
+	} else {
+		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative) VALUES ("'+wineid+'", "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'")';
+	}
+	connection.query(sql, function(err, rows, fields) {
+		if (err) {
+			res.send('Something went wrong, sorry!')
+		} else {
+			res.send(true);
+		}
+	});
+});
+
 //Static file server for files in the /public folder
 app.use(express.static(__dirname + '/public'));
 
 //Serve to localhost:3000
-//app.listen(3000);
+app.listen(3000);
 
 //Serve to local network on port 8000:
 //app.listen(8000, 'your.local.ip.here');
-app.listen(8000, '192.168.0.3');
