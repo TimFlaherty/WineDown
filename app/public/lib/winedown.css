@@ -13,7 +13,8 @@ body {
 .navitem {
 	display:inline;
 	margin:auto;
-	padding:25px;
+	padding:10px;
+	height:100%;
 	float:center;
 	background:#CFCFCF;
 }

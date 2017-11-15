@@ -14,12 +14,17 @@
 <body>
 	<!-- AJAX call checks cookies to see if user is logged in -->
 	<script>
-	//Check if user logged in on page load
+        //Check if user is logged in and load appropriate button
 		function logcheck(){
 			$.ajax({url: '/logcheck', 
 				type: 'get'
 			}).done(function (data) {
-				$("#login").html(data);
+                if (data == true) {
+                    $("#login").html('<button style="width:auto;" onclick="logout()">Log Out</button>');
+                } else if (data == false){
+                    var btn = "document.getElementById('id01').style.display='block'";
+                    $("#login").html('<button onclick="'+btn+'" style="width:auto;">Login</button>');
+                }
 			});
 		}
 			
@@ -69,23 +74,6 @@
 	<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBHxLxifPq-0zZ9bnZXQjjfPcmtawXwhJg"></script>
 	<script src="http://labs.easyblog.it/maps/leaflet-search/dist/leaflet-search.min.js"></script>
 	<script>		
-		// Get the modal
-		var modal = document.getElementById('id01');
-		
-		// When the user clicks anywhere outside of the modal, close it
-		window.onclick = function(event) {
-			if (event.target == modal) {
-				modal.style.display = "none";
-			}
-		}
-		
-		function modclose() {
-			$('#id01').css('display','none');
-			$('#resultmsg').html('');
-			$('#addfield').html('');
-			$('#modbutton').html('<button onclick="login()">Log In</button>');
-		}
-	
 		// Declare OpenStreetMap tiles
 		const osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			id: 'OpenStreetMap.Mapnik',
@@ -223,16 +211,8 @@
 				$("#login").html('<button onclick="'+btn+'" style="width:auto;">Login</button>');
 			});
 		}
-		
-		//Displays user signup dialog in modal box
-		function create() {
-			$("#resultmsg").html('');
-			$("#addfield").html('<label><b>Email</b></label>'
-			+'<input type="text" placeholder="Enter Email" id="email" required>');
-			
-			$("#modbutton").html('<button onclick="signup()">Sign Up</button>');
-		}
-		
+        
+        
 		//User signup function
 		function signup(){
 			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
@@ -250,14 +230,40 @@
 				if(data == true) {
 					$("#login").html('<button style="width:auto;" onclick="logout()">Log Out</button>');
 					window.alert('Welcome to WineDown!');
+					logcheck();
 					modclose();
 				} else {
 					$("#resultmsg").html(data);
 				}
 			});
 		}
+        
 		
+        // Get the modal
+		var modal = document.getElementById('id01');
 		
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+		
+		function modclose() {
+			$('#id01').css('display','none');
+			$('#resultmsg').html('');
+			$('#addfield').html('');
+			$('#modbutton').html('<button onclick="login()">Log In</button>');
+		}
+        
+		//Displays user signup dialog in modal box
+		function create() {
+			$("#resultmsg").html('');
+			$("#addfield").html('<label><b>Email</b></label>'
+			+'<input type="text" placeholder="Enter Email" id="email" required>');
+			
+			$("#modbutton").html('<button onclick="signup()">Sign Up</button>');
+		}	
 	</script>
 </body>
 </html>
