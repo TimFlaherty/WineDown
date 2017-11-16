@@ -6,6 +6,7 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<link rel="stylesheet" href="lib/winedown.css" />
 	<link rel="stylesheet" href="lib/modal.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -20,10 +21,10 @@
 				type: 'get'
 			}).done(function (data) {
                 if (data == true) {
-                    $("#login").html('<button style="width:auto;" onclick="logout()">Log Out</button>');
+                    $("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
                 } else if (data == false){
                     var btn = "document.getElementById('id01').style.display='block'";
-                    $("#login").html('<button onclick="'+btn+'" style="width:auto;">Login</button>');
+                    $("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="'+btn+'">Login</button>');
                 }
 			});
 		}
@@ -34,19 +35,51 @@
 	<!-- Pre-load a loading GIF for AJAX calls but do not display --> 
 	<img src="lib/loading.gif" alt="Please wait..." style="display:none;">
 	
-    <div id="navi">
-        <div id="logo" class="navitem">WD</div>
-        <div id="learn" class="navitem">Learn</div>
-        <div id="tasting" class="navitem">Tasting Notes</div>
-        <div id="help" class="navitem">Help</div>
-        <div id="login" class="navitem"></div>
+    <nav class="navbar navbar-expand-md navbar-dark static-top">
+        <a class="navbar-brand" href="#">WineDown</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        	<span class="navbar-toggler-icon"></span>
+      	</button>
+      	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      		<ul class="navbar-nav mr-auto">
+      			<li class="nav-item">
+            		<a class="nav-link" href="#">Learn</a>
+          		</li>
+				<li class="nav-item">
+            		<a class="nav-link" href="#">Tasting Notes</a>
+          		</li>
+          		<li class="nav-item">
+            		<a class="nav-link" href="#">Help</a>
+          		</li>
+			</ul>
+			<div id="login"></div>
+		</div>
+    </nav>
+    
+    <div id="maptainer" class="container-fluid">
+    	<div id="pagerow" class="row">
+			<div class="left col-lg-auto">
+                <div class="row">
+                    <div class="col-lg-auto">
+                        <select id="opts"></select>
+                    </div>
+                    <div class="col-lg-auto">
+                        <button class="btn btn-outline-success" onclick="filter()">Filter by Varietal</button>
+                    </div>
+                </div>
+			</div>
+			<div id="map" class="col-12 col-lg-auto"></div>
+			<div class="right col">Ads?</div>
+        </div>
     </div>
-    <div id="maptainer">
-        <div class="left">LEFT</div>
-        <div id="map"></div>
-        <div class="right">RIGHT</div>
-    </div>
-    <div id="footer">FOOTER</div>
+    
+    <nav class="navbar navbar-expand-md navbar-dark fixed-bottom">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Footer</a>
+			</li>
+		</ul>
+    </nav>
     
     <!-- Modal Sign In Box, hidden by default -->
     <div id="id01" class="modal">
@@ -83,6 +116,8 @@
 		// Declare map variable
 		var map;
 		
+		var markers = new L.FeatureGroup();
+		
 		//Declare mapping function
 		function mapit() {
 			// Initialize map and center on Amador County (roughly)
@@ -111,34 +146,7 @@
 			
 			//locate();
 			
-			// WINERY PINS
-			// AJAX request to node server returns an array of winery data 
-			$.ajax({url: '/winerypins', 
-				type: 'get',
-				}).done(function (data) {
-				for (i=0;i<data.length;i++) {
-					//If there is no winery rating available, display message
-					var rating = data[i].wineryrating;
-					if (rating == null) {
-						rating = "Be the first to review!";
-					}
-                    //If there is no varietal information available, display message
-					var varietals = data[i].varietals;
-					if (varietals == null) {
-						varietals = "Be the first to review!";
-					}
-					// For each winery i, grab coordinates, drop a marker, and populate the marker data
-					var marker = L.marker([data[i].lat, data[i].lng]).addTo(map)
-						.bindPopup("<a href='winery?wineryid="+data[i].wineryid+"'><h3>"+data[i].wineryname+"</h3></a>"
-						+ "<b>Tasting Room Hours:</b><br>" 
-						+ data[i].hours
-						+ "<br><br><b>Popular Varietals:</b><br>"
-						+ varietals
-						+ "<br><br><b>WineDown Rating: </b><br>"
-						+ rating
-					);
-				};
-			});
+			
 			
 			// MAP SEARCH FUNCTIONALITY
 			// Initialize Google maps geocoder
@@ -181,6 +189,62 @@
 		//Call map function
 		mapit();
 		
+		// WINERY PINS
+		// AJAX request to node server returns an array of winery data 
+		function pins(x) {
+			markers.clearLayers();
+			$.ajax({url: '/winerypins?varietal='+x, 
+				type: 'get',
+				}).done(function (data) {
+				for (i=0;i<data.length;i++) {
+					//If there is no winery rating available, display message
+					var rating = data[i].wineryrating;
+					if (rating == null) {
+						rating = "Be the first to review!";
+					}
+					//If there is no varietal information available, display message
+					var varietals = data[i].varietals;
+					if (varietals == null) {
+						varietals = "Be the first to review!";
+					}
+					// For each winery i, grab coordinates, drop a marker, and populate the marker data
+					var marker = L.marker([data[i].lat, data[i].lng])
+						.bindPopup("<a href='winery?wineryid="+data[i].wineryid+"'><h3>"+data[i].wineryname+"</h3></a>"
+						+ "<b>Tasting Room Hours:</b><br>" 
+						+ data[i].hours
+						+ "<br><br><b>Varietals:</b><br>"
+						+ varietals
+						+ "<br><br><b>WineDown Rating: </b><br>"
+						+ rating
+					);
+					
+					markers.addLayer(marker);
+					map.addLayer(markers);
+				};
+			});
+		}
+		
+		pins('all');
+		
+		function selector() {
+			$.ajax({url: '/opts', 
+				type: 'get',
+				}).done(function (data) {
+				for (i=0;i<data.length;i++) {
+					$('#opts').append($('<option>', {
+						value: data[i].varietal,
+						text: data[i].varietal
+					}));
+				};
+			});
+		}
+		
+		selector();
+			
+		function filter() {
+			pins($('#opts').val());
+		}
+		
 		//User login function
 		function login(){
 			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
@@ -194,7 +258,7 @@
 				}
 			}).done(function (data) {
 				if(data == true) {
-					$("#login").html('<button style="width:auto;" onclick="logout()">Log Out</button>');
+					$("#login").html('<button class="btn btn-outline-danger my-2 my-sm-0" onclick="logout()">Log Out</button>');
 					modclose();
 				} else {
 					$("#resultmsg").html(data);
@@ -208,7 +272,7 @@
 				type: 'get'
 			}).done(function (data) {
 				var btn = "document.getElementById('id01').style.display='block'";
-				$("#login").html('<button onclick="'+btn+'" style="width:auto;">Login</button>');
+				$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="'+btn+'" style="width:auto;">Login</button>');
 			});
 		}
         
@@ -228,7 +292,7 @@
 				}
 			}).done(function (data) {
 				if(data == true) {
-					$("#login").html('<button style="width:auto;" onclick="logout()">Log Out</button>');
+					$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" style="width:auto;" onclick="logout()">Log Out</button>');
 					window.alert('Welcome to WineDown!');
 					logcheck();
 					modclose();
@@ -265,5 +329,7 @@
 			$("#modbutton").html('<button onclick="signup()">Sign Up</button>');
 		}	
 	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
 </html>

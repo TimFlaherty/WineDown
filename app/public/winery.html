@@ -5,6 +5,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" href="lib/winery.css" />
     <link rel="stylesheet" href="lib/winedown.css" />
     <link rel="stylesheet" href="lib/modal.css" />
@@ -20,13 +21,13 @@
 			}).done(function (data) {
                 if (data == false) {
 					var btn = "document.getElementById('id01').style.display='block'";
-                    $("#login").html('<button onclick="'+btn+'" style="width:auto;">Login</button>');
+					$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="'+btn+'">Login</button>');
                     $("#rating").hide();
-                    $("#reviewbtn").html('<button onclick="'+btn+'" style="width:100px;">Login to Review</button>');
+                    $("#reviewbtn").html('<button class="btn wide-btn btn-outline-success my-2 my-sm-0" onclick="'+btn+'">Login to Review</button>');
                 } else if (data == true){
-                    $("#login").html('<button style="width:auto;" onclick="logout()">Log Out</button>');
+                    $("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
                     $("#rating").show();
-                    $("#reviewbtn").html('<button onclick="wineryreview()" style="width:100px;">Rate It!</button>');
+                    $("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="wineryreview()">Rate It!</button>');
                 }
 			});
 		}
@@ -38,39 +39,61 @@
 	<!-- Pre-load a loading GIF for AJAX calls but do not display --> 
 	<img src="lib/loading.gif" alt="Please wait..." style="display:none;">
 	
-    <div id="navi">
-        <div id="logo" class="navitem">WD</div>
-        <div id="learn" class="navitem">Learn</div>
-        <div id="tasting" class="navitem">Tasting Notes</div>
-        <div id="help" class="navitem">Help</div>
-        <div id="login" class="navitem"></div>
-    </div>
-
-	<a href="<%=url%>"><%=wineryname%></a>
-	<br>
-	<%=address%>
-	<br>
-	<%=hours%>
-	<br>
-	<%=phone%>
-	<br>
-    <br>
-    <div id="rating">
-        <select id="ratenum">
-            <option selected="selected" disabled>Select your rating...</option>
-            <option value="1">1</option>
-            <option value="1">2</option>
-            <option value="1">3</option>
-            <option value="1">4</option>
-            <option value="1">5</option>
-        </select>
-        <br>
-        <textarea id="narrative" placeholder="Leave a few words about <%=wineryname%>"></textarea>
-        <br>
-    </div>
-    <div id="reviewbtn"></div>
-	<br><br>
-	<a href="/">Return to Map</a>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <a class="navbar-brand" href="/">WineDown</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        	<span class="navbar-toggler-icon"></span>
+      	</button>
+      	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      		<ul class="navbar-nav mr-auto">
+      			<li class="nav-item">
+            		<a class="nav-link" href="#">Learn</a>
+          		</li>
+				<li class="nav-item">
+            		<a class="nav-link" href="#">Tasting Notes</a>
+          		</li>
+          		<li class="nav-item">
+            		<a class="nav-link" href="#">Help</a>
+          		</li>
+			</ul>
+			<div id="login"></div>
+		</div>
+    </nav>
+	<div class="container-fluid">
+		<div id="info">
+			<a href="<%=url%>"><%=wineryname%></a>
+			<br>
+			<%=address%>
+			<br>
+			<%=hours%>
+			<br>
+			<%=phone%>
+			<br>
+			<br>
+			<div id="rating">
+				<select id="ratenum">
+					<option selected="selected" disabled>Select your rating...</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
+				<br>
+				<textarea id="narrative" placeholder="Leave a few words about <%=wineryname%>"></textarea>
+				<br>
+			</div>
+			<div id="reviewbtn"></div>
+		</div>
+	</div>
+	
+	<nav class="navbar navbar-expand-md navbar-dark fixed-bottom">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Footer</a>
+			</li>
+		</ul>
+    </nav>
     
     <!-- Modal Sign In Box, hidden by default -->
     <div id="id01" class="modal">
@@ -203,5 +226,7 @@
 			$("#modbutton").html('<button onclick="signup()">Sign Up</button>');
 		}	
 	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
 </html>
