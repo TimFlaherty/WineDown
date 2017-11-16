@@ -81,16 +81,29 @@ app.get('/logcheck', function (req, res) {
 
 //Get winery data for map pin
 app.get('/winerypins', function (req, res) {
-	// Query MySQL database, kind of complex to get the varietal data for each winery but it works great
-	connection.query('SELECT * FROM winerypins', function(err, rows, fields) {
-		res.send(rows);
-	});
+	var varietal = req.query.varietal;
+	if (varietal == 'all') {
+		connection.query('SELECT * FROM winerypins', function(err, rows, fields) {
+			res.send(rows);
+		})
+	} else {
+		connection.query('SELECT * FROM winerypins WHERE varietal="'+varietal+'" GROUP BY wineryid', function(err, rows, fields) {
+			res.send(rows);
+		})
+	}
 });
 
 //Route and serve winery data to winery profile template page
 app.get('/winery', function (req, res) {
 	connection.query('SELECT * FROM winery WHERE wineryid=' + req.query.wineryid, function(err, rows, fields) {
 		res.render(__dirname +'/public/winery.html', rows[0]);
+	});
+});
+
+//Get all varietals
+app.get('/opts', function (req, res) {
+	connection.query('SELECT DISTINCT varietal FROM wine', function(err, rows, fields) {
+		res.send(rows);
 	});
 });
 

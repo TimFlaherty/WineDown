@@ -64,17 +64,26 @@ CREATE VIEW wineryrating AS
 	WHERE wineid IS NULL 
 	GROUP BY wineryid;
 
+CREATE VIEW wineryvars AS
+	SELECT wineryid, 
+	GROUP_CONCAT(DISTINCT varietal SEPARATOR ", ") AS varietals 
+	FROM wine 
+	GROUP BY wineryid;
+	
 CREATE VIEW winerypins AS
 	SELECT a.wineryid, 
 	a.wineryname, 
 	a.lat, 
 	a.lng, 
 	a.hours, 
-	GROUP_CONCAT(DISTINCT b.varietal SEPARATOR ", ") AS varietals,
+	b.varietal,
+	d.varietals,
 	c.wineryrating
 	FROM winery a 
-	LEFT JOIN winerating b 
+	JOIN wine b 
 	ON a.wineryid = b.wineryid 
 	LEFT JOIN wineryrating c
 	ON a.wineryid = c.wineryid
-	GROUP BY a.wineryid;
+	LEFT JOIN wineryvars d
+	ON a.wineryid = d.wineryid;
+
