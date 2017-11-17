@@ -5,7 +5,7 @@ Instructions
 $> git clone https://github.com/TimFlaherty/WineDown
 ```
 
-2. cd in to the 'node-mysql-starter' directory and install modules:
+2. cd in to the 'winedown' directory and install modules:
 ```
 $>npm install
 ```
