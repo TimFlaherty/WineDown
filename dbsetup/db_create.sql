@@ -47,14 +47,11 @@ FOREIGN KEY (uid) REFERENCES usr(uid)
 );
 
 CREATE VIEW winerating AS
-	SELECT a.wineid,
-	a.wineryid,	
-	b.varietal,
-	AVG(a.rating) AS winerating
+	SELECT wineid,
+	wineryid,	
+	AVG(rating) AS winerating
 	FROM review a
-	JOIN wine b 
-	ON a.wineid = b.wineid
-	WHERE a.wineid > 0 
+	WHERE wineid > 0
 	GROUP BY wineid;
 	
 CREATE VIEW wineryrating AS
@@ -87,3 +84,24 @@ CREATE VIEW winerypins AS
 	LEFT JOIN wineryvars d
 	ON a.wineryid = d.wineryid;
 
+CREATE VIEW wines AS
+	SELECT a.wineryid,
+	a.wineid,
+	a.winename,
+	a.vintage,
+	a.varietal,
+	b.winerating
+	FROM wine a
+	LEFT JOIN winerating b
+	ON a.wineid = b.wineid;
+	
+CREATE VIEW wineryrvw AS
+	SELECT b.wineryid,
+	b.rating,
+	b.narrative,
+	a.uname,
+	a.uid
+	FROM usr a
+	JOIN review b
+	ON a.uid = b.uid
+	AND b.wineid IS NULL;
