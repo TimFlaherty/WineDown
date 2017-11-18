@@ -6,7 +6,7 @@ var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
-var connection = mysql.createConnection('mysql://root:10Guitar74!@localhost/winedown');
+var connection = mysql.createConnection('mysql://root@localhost/winedown');
 
 //Declare app
 var app = express();
@@ -93,6 +93,13 @@ app.get('/winerypins', function (req, res) {
 	}
 });
 
+//Get all varietals
+app.get('/opts', function (req, res) {
+	connection.query('SELECT DISTINCT varietal FROM wine', function(err, rows, fields) {
+		res.send(rows);
+	});
+});
+
 //Route and serve winery data to winery profile template page
 app.get('/winery', function (req, res) {
 	connection.query('SELECT * FROM winery WHERE wineryid=' + req.query.wineryid, function(err, rows, fields) {
@@ -100,9 +107,16 @@ app.get('/winery', function (req, res) {
 	});
 });
 
-//Get all varietals
-app.get('/opts', function (req, res) {
-	connection.query('SELECT DISTINCT varietal FROM wine', function(err, rows, fields) {
+//Get wines by wineryid
+app.get('/wines', function (req, res) {
+	connection.query('SELECT * FROM wines WHERE wineryid='+req.query.wineryid, function(err, rows, fields) {
+		res.send(rows);
+	});
+});
+
+//Get winery reviews
+app.get('/wineryrvw', function (req, res) {
+	connection.query('SELECT * FROM wineryrvw WHERE wineryid='+req.query.wineryid, function(err, rows, fields) {
 		res.send(rows);
 	});
 });
