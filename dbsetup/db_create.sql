@@ -77,7 +77,7 @@ CREATE VIEW winerypins AS
 	d.varietals,
 	c.wineryrating
 	FROM winery a 
-	JOIN wine b 
+	LEFT JOIN wine b 
 	ON a.wineryid = b.wineryid 
 	LEFT JOIN wineryrating c
 	ON a.wineryid = c.wineryid
