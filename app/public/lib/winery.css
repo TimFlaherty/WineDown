@@ -27,12 +27,39 @@ body {
 	padding:10px;
 }
 
+#plus {
+	float:right;
+}
+
+.winerow, .rvwrow {
+	padding-top:20px;
+	padding-bottom:20px;
+}
+
+.winerow:hover, .rvwrow:hover {
+	background:#f0f0f0;
+}
+
+.scrolly {
+	overflow:hidden;
+	overflow-y:scroll;
+	height:750px;
+}
+
 @media (max-width: 1024px) {
 	.container-fluid { 
-		padding: 0px;
+		padding: 10px;
 	}
 	
 	body {
 		padding-top: 60px;
+	}
+	
+	.scrolly {
+		height:200px;
+	}
+	
+	.mainrow {
+		padding-bottom:50px;
 	}
 }
