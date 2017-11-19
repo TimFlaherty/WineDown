@@ -125,6 +125,7 @@
 		// Declare map variable
 		var map;
 		
+		//Declare global variable for map pins
 		var markers = new L.FeatureGroup();
 		
 		//Declare mapping function
@@ -151,9 +152,38 @@
 				
 				// Add location pin to map
 				map.on('locationfound', onLocationFound);
+				
+				//If there is a location error, display the error
+				function onLocationError(e) {
+					alert(e.message);
+				}
+				
+				map.on('locationerror', onLocationError);
 			}
 			
-			//locate();
+			//Locate map control
+			var locator = L.Control.extend({
+				options: {
+					position: 'topright' 
+				},
+				onAdd: function (map) {
+					var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+					
+					container.style.backgroundColor = 'white';
+					container.style.width = '35px';
+					container.style.height = '35px';
+					container.style.padding = '5px';
+					container.style.margin = '15px';
+					container.innerHTML = '<img src="lib/locate.png" alt="Locate">';
+					
+					container.onclick = function(){
+						locate();
+					}
+					return container;
+				}
+			});
+				
+			map.addControl(new locator());
 			
 			
 			
