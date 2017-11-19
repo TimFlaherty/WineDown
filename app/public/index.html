@@ -114,10 +114,10 @@
 
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBHxLxifPq-0zZ9bnZXQjjfPcmtawXwhJg"></script>
-	<script src="http://labs.easyblog.it/maps/leaflet-search/dist/leaflet-search.min.js"></script>
+	<script src="lib/leaflet-search.js"></script>
 	<script>		
 		// Declare OpenStreetMap tiles
-		const osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			id: 'OpenStreetMap.Mapnik',
 			//attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 		});
@@ -167,12 +167,11 @@
 					position: 'topright' 
 				},
 				onAdd: function (map) {
-					var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+					var container = L.DomUtil.create('div', 'locatebtn leaflet-bar leaflet-control leaflet-control-custom');
 					
 					container.style.backgroundColor = 'white';
 					container.style.width = '35px';
 					container.style.height = '35px';
-					container.style.padding = '5px';
 					container.style.margin = '15px';
 					container.innerHTML = '<img src="lib/locate.png" alt="Locate">';
 					

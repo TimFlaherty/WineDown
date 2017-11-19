@@ -1,9 +1,19 @@
+//Include modules
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
 var express = require('express');
 var serveStatic = require('serve-static');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
+
+//Get SSL key & certificates from /certs folder
+var options = {
+	key: fs.readFileSync(__dirname+'/certs/server.key'),
+	cert: fs.readFileSync(__dirname+'/certs/server.crt')
+};
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
 var connection = mysql.createConnection('mysql://root@localhost/winedown');
@@ -146,8 +156,15 @@ app.post('/review', function (req, res) {
 //Static file server for files in the /public folder
 app.use(express.static(__dirname + '/public'));
 
+//Serve HTTP to port 3000
+http.createServer(app).listen(3000);
+
+//Serve HTTPS to port 2000
+https.createServer(options, app).listen(2000);
+
 //Serve to localhost:3000
-app.listen(3000);
+//app.listen(3000);
 
 //Serve to local network on port 8000:
-//app.listen(8000, 'your.local.ip.here');
+//app.listen(8000, '192.168.0.7');
+
