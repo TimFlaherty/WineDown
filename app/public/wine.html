@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%=winename%> on WineDown</title> 
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="lib/winery.css" />
+    <link rel="stylesheet" href="lib/winedown.css" />
+    <link rel="stylesheet" href="lib/modal.css" />
+</head>
+
+<body>
+	<!-- AJAX call checks cookies to see if user is logged in -->
+	<script>
+        //Check if user is logged in and load appropriate button
+		function logcheck(){
+			$.ajax({url: '/logcheck', 
+				type: 'get'
+			}).done(function (data) {
+                if (data == false) {
+					var btn = "document.getElementById('id01').style.display='block'";
+					$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="'+btn+'">Login</button>');
+                    $("#rating").hide();
+                    $("#reviewbtn").html('<button class="btn wide-btn btn-outline-success my-2 my-sm-0" onclick="'+btn+'">Login to Review</button>');
+                } else if (data == true){
+                    $("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
+                    $("#rating").show();
+                    $("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="winereview()">Rate It!</button>');
+                }
+			});
+		}
+			
+		logcheck();
+        
+	</script>
+    
+	<!-- Pre-load a loading GIF for AJAX calls but do not display --> 
+	<img src="lib/loading.gif" alt="Please wait..." style="display:none;">
+	
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <a class="navbar-brand" href="/">WineDown</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        	<span class="navbar-toggler-icon"></span>
+      	</button>
+      	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      		<ul class="navbar-nav mr-auto">
+      			<li class="nav-item">
+            		<a class="nav-link" href="#">Learn</a>
+          		</li>
+				<li class="nav-item">
+            		<a class="nav-link" href="#">Tasting Notes</a>
+          		</li>
+          		<li class="nav-item">
+            		<a class="nav-link" href="#">Help</a>
+          		</li>
+			</ul>
+			<div id="login"></div>
+		</div>
+    </nav>
+	<div class="container-fluid">
+		<div class="mainrow row">
+			<div id="info" class="col">
+				<%=winename%>
+				<br>
+				<%=vintage%>
+				<br>
+				<%=varietal%>
+				<br>
+				<br>
+				<div id="rating">
+					<select id="ratenum">
+						<option selected="selected" disabled>Select your rating...</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+					<br>
+					<textarea id="narrative" placeholder="Leave a few words about <%=winename%>"></textarea>
+					<br>
+				</div>
+				<div id="reviewbtn"></div>
+			</div>
+			<div class="col-lg-4">
+				<div id="accord" data-children=".scrolly">
+					<hr>
+					<h3 data-toggle="collapse" data-parent="#accord" href="#rvwtarget" aria-expanded="true" aria-controls="rvwtarget">Reviews of <%=winename%></h3>
+					<hr>
+					<div id="rvwtarget" class="scrolly collapse show">
+						
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	<nav class="navbar navbar-expand-md navbar-dark fixed-bottom">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Footer</a>
+			</li>
+		</ul>
+    </nav>
+    
+    <!-- Modal Sign In Box, hidden by default -->
+    <div id="id01" class="modal">
+		<div class="modal-content animate">
+			<div class="modtainer">
+				<label><b>Username</b></label>
+				<input type="text" placeholder="Enter Username" id="uname" required>
+				
+				<label><b>Password</b></label>
+				<input type="password" placeholder="Enter Password" id="pwd" required>
+				<div id="addfield"></div>
+				<br>
+				<div id="modbutton"><button onclick="login()">Login</button></div>
+			</div>
+			<div id="resultmsg"></div>
+			<div class="modtainer" style="background-color:#f1f1f1">
+				<button type="button" onclick="modclose()" class="cancelbtn">Cancel</button>
+				<button type="button" onclick="create()" class="signup">Create Account</button>
+				<!--<span class="psw"><a href="#">Forgot password?</a></span>-->
+			</div>
+		</div>
+	</div>
+    
+    <script>
+    /* USER REVIEW FUNCTIONS */
+        //New winery review
+        function winereview(){
+            $("#reviewbtn").html('<img src="lib/loading.gif" alt="Please wait...">');
+			var ratenum = $("#ratenum").val();
+			var narr = $("#narrative").val();
+			$.ajax({url: '/review', 
+				type: 'post',
+				data: {
+                    wineid: <%=wineid%>,
+                    wineryid: <%=wineryid%>,
+					rating: ratenum,
+					narrative: narr
+				}
+			}).done(function (data) {
+				if(data == true) {
+					$("#reviewbtn").html('COOL');
+				} else {
+					$("#reviewbtn").html(data);
+				}
+			});
+			winervws();
+        }
+        
+        //Display wine reviews
+        function winervws() {
+			$.ajax({url: '/winervw?wineid='+<%=wineid%>, 
+				type: 'get',
+				}).done(function (data) {
+				if(data.length==0) {
+					$('#rvwtarget').html('Be the first to review!');
+					$('#rvwtarget').css('height', '100px');
+				} else {
+					for (i=0;i<data.length;i++) {
+						var rating = data[i].rating;
+						if (rating == null) {
+							rating = 'N/A';
+						};
+						$('#rvwtarget').append('<div class="rvwrow row">'
+							+'<div class="uname col-2"><a href="user?uname='+data[i].uname+'">'
+							+data[i].uname+'</a></div><div class="rating col-2">'
+							+rating+'</div><div class="narrative col-8">'
+							+data[i].narrative+'</div></div>'
+						);
+					};
+				};
+			});
+		}
+		
+		winervws();
+    
+    /* DISPLAY WINES */
+    	function wines() {
+			$.ajax({url: '/wines?wineryid='+<%=wineryid%>, 
+				type: 'get',
+				}).done(function (data) {
+				for (i=0;i<data.length;i++) {
+					var rating = data[i].winerating;
+					if (rating == null) {
+						rating = 'N/A';
+					};
+					$('#winetarget').append('<div class="winerow row">'
+						+'<div class="wine col-5"><a href="wine?wineid='+data[i].wineid+'">'
+						+data[i].winename+'</a></div><div class="vintage col-2">'
+						+data[i].vintage+'</div><div class="varietal col-3">'
+						+data[i].varietal+'</div><div class="winerating col-2">'
+						+rating+'</div></div>'
+					);
+				};
+			});
+		}
+		
+		//wines();
+    
+    /* LOGIN-LOGOUT-SIGNUP FUNCTIONS */
+        //User login function
+		function login(){
+			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
+			var name = $("#uname").val();
+			var pass = $("#pwd").val();
+			$.ajax({url: '/login', 
+				type: 'post',
+				data: {
+					uname: name,
+					pwd: pass
+				}
+			}).done(function (data) {
+				if(data == true) {
+					modclose();
+                    logcheck();
+				} else {
+					$("#resultmsg").html(data);
+				}
+			});
+		}
+		
+		//User logout function
+		function logout(){
+			$.ajax({url: '/logout', 
+				type: 'get'
+			}).done(function (data) {
+				logcheck();
+			});
+		}
+        
+        
+		//User signup function
+		function signup(){
+			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
+			var name = $("#uname").val();
+			var pass = $("#pwd").val();
+			var mail = $("#email").val();
+			$.ajax({url: '/signup', 
+				type: 'post',
+				data: {
+					uname: name,
+					pwd: pass,
+					email: mail
+				}
+			}).done(function (data) {
+				if(data == true) {
+					window.alert('Welcome to WineDown!');
+					logcheck();
+					modclose();
+				} else {
+					$("#resultmsg").html(data);
+				}
+			});
+		}
+    
+        
+    /* MODAL BOX */
+        // Get the modal
+		var modal = document.getElementById('id01');
+		
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+		
+		function modclose() {
+			$('#id01').css('display','none');
+			$('#resultmsg').html('');
+			$('#addfield').html('');
+			$('#modbutton').html('<button onclick="login()">Log In</button>');
+		}
+        
+		//Displays user signup dialog in modal box
+		function create() {
+			$("#resultmsg").html('');
+			$("#addfield").html('<label><b>Email</b></label>'
+			+'<input type="text" placeholder="Enter Email" id="email" required>');
+			
+			$("#modbutton").html('<button onclick="signup()">Sign Up</button>');
+		}	
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+</html>

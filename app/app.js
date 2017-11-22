@@ -153,6 +153,20 @@ app.post('/review', function (req, res) {
 	});
 });
 
+//Route and serve wine data to wine page template
+app.get('/wine', function (req, res) {
+	connection.query('SELECT * FROM wine WHERE wineid=' + req.query.wineid, function(err, rows, fields) {
+		res.render(__dirname +'/public/wine.html', rows[0]);
+	});
+});
+
+//Get wine reviews
+app.get('/winervw', function (req, res) {
+	connection.query('SELECT * FROM winervw WHERE wineid='+req.query.wineid, function(err, rows, fields) {
+		res.send(rows);
+	});
+});
+
 //Static file server for files in the /public folder
 app.use(express.static(__dirname + '/public'));
 
