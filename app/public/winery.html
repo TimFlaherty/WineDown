@@ -61,7 +61,7 @@
     </nav>
 	<div class="container-fluid">
 		<div class="mainrow row">
-			<div id="info" class="col">
+			<div id="info" class="col-xl-2 col-lg-3">
 				<a href="<%=url%>"><%=wineryname%></a>
 				<br>
 				<%=address%>
@@ -86,7 +86,7 @@
 				</div>
 				<div id="reviewbtn"></div>
 			</div>
-			<div class="col-lg-4">
+			<div class="col-xl-5 col-lg-4">
 				<div id="accord" data-children=".scrolly">
 					<hr>
 					<h3 data-toggle="collapse" data-parent="#accord" href="#rvwtarget" aria-expanded="true" aria-controls="rvwtarget">Reviews of <%=wineryname%></h3>
@@ -96,7 +96,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-4">
+			<div class="col-xl-5 col-lg-5">
 			<div id="accord2" data-children=".scrolly">
 				<hr>
 				<h3 data-toggle="collapse" data-parent="#accord2" href="#winetarget" aria-expanded="true" aria-controls="winetarget"><%=wineryname%> Wines</h3>
@@ -184,10 +184,12 @@
 						if (rating == null) {
 							rating = 'N/A';
 						};
-						$('#rvwtarget').append('<div class="rvwrow row">'
-							+'<div class="uname col-2"><a href="user?uname='+data[i].uname+'">'
-							+data[i].uname+'</a></div><div class="rating col-2">'
-							+rating+'</div><div class="narrative col-8">'
+						$('#rvwtarget').append('<div class="rvwrow"><div class="row">'
+							+'<div class="rating col-4"><h5><b>Rating: </b>'
+							+rating+'</h5></div>'
+                            +'<div class="uname col-4"><a href="user?uname='+data[i].uname+'">'
+							+data[i].uname+'</a></div><div class="rvwdate col-4">'
+                            +data[i].rvwdate+'</div></div><div class="narrative row col">'
 							+data[i].narrative+'</div></div>'
 						);
 					};

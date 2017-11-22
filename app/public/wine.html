@@ -167,10 +167,12 @@
 						if (rating == null) {
 							rating = 'N/A';
 						};
-						$('#rvwtarget').append('<div class="rvwrow row">'
-							+'<div class="uname col-2"><a href="user?uname='+data[i].uname+'">'
-							+data[i].uname+'</a></div><div class="rating col-2">'
-							+rating+'</div><div class="narrative col-8">'
+						$('#rvwtarget').append('<div class="rvwrow"><div class="row">'
+							+'<div class="rating col-4"><h5><b>Rating: </b>'
+							+rating+'</h5></div>'
+                            +'<div class="uname col-4"><a href="user?uname='+data[i].uname+'">'
+							+data[i].uname+'</a></div><div class="rvwdate col-4">'
+                            +data[i].rvwdate+'</div></div><div class="narrative row col">'
 							+data[i].narrative+'</div></div>'
 						);
 					};
