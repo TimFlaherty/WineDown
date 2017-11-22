@@ -24,11 +24,11 @@ INSERT INTO usr (uname, pwd, email) VALUES
 ('User2', 'password', 'user2@freemail.com')
 ;
 
-INSERT INTO review (wineid, wineryid, uid, rating, narrative) VALUES
-(NULL, 000001, 00000001, 4, 'Had a lot of fun at this really cool winery!'),
-(NULL, 000001, 00000002, 5, 'Awesome winery! We will be back!'),
-(NULL, 000002, 00000002, 3, 'Great wine but the tasting room was a bit small'),
-(0000008, 000003, 00000001, 4, 'A delicious red'),
-(0000008, 000003, 00000002, 5, 'Great zinfandel!'),
-(0000005, 000002, 00000002, 5, 'My favorite white wine!')
+INSERT INTO review (wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES
+(NULL, 000001, 00000001, 4, 'Had a lot of fun at this really cool winery!', CURDATE(), CURTIME()),
+(NULL, 000001, 00000002, 5, 'Awesome winery! We will be back!', CURDATE(), CURTIME()),
+(NULL, 000002, 00000002, 3, 'Great wine but the tasting room was a bit small', CURDATE(), CURTIME()),
+(0000008, 000003, 00000001, 4, 'A delicious red', CURDATE(), CURTIME()),
+(0000008, 000003, 00000002, 5, 'Great zinfandel!', CURDATE(), CURTIME()),
+(0000005, 000002, 00000002, 5, 'My favorite white wine!', CURDATE(), CURTIME())
 ;

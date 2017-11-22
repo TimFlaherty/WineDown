@@ -140,9 +140,9 @@ app.post('/review', function (req, res) {
 	var narrative = req.body.narrative;
 	//Differentiate between wine and winery reviews
 	if (wineid == 'none') {
-		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative) VALUES (NULL, "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'")';
+		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES (NULL, "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'", CURDATE(), CURTIME())';
 	} else {
-		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative) VALUES ("'+wineid+'", "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'")';
+		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES ("'+wineid+'", "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'", CURDATE(), CURTIME())';
 	}
 	connection.query(sql, function(err, rows, fields) {
 		if (err) {

@@ -41,6 +41,8 @@ wineryid INT(6) ZEROFILL NOT NULL,
 uid INT(8) ZEROFILL NOT NULL,
 rating INT(1) NOT NULL,
 narrative VARCHAR(256),
+rvwdate DATE,
+rvwtime TIME,
 FOREIGN KEY (wineid) REFERENCES wine(wineid),
 FOREIGN KEY (wineryid) REFERENCES winery(wineryid),
 FOREIGN KEY (uid) REFERENCES usr(uid)
@@ -99,6 +101,7 @@ CREATE VIEW wineryrvw AS
 	SELECT b.wineryid,
 	b.rating,
 	b.narrative,
+	DATE_FORMAT(b.rvwdate, "%M %d, %Y") AS rvwdate,
 	a.uname,
 	a.uid
 	FROM usr a
@@ -110,6 +113,7 @@ CREATE VIEW winervw AS
 	SELECT b.wineid,
 	b.rating,
 	b.narrative,
+	DATE_FORMAT(b.rvwdate, "%M %d, %Y") AS rvwdate,
 	a.uname,
 	a.uid
 	FROM usr a
