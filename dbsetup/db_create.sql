@@ -105,3 +105,14 @@ CREATE VIEW wineryrvw AS
 	JOIN review b
 	ON a.uid = b.uid
 	AND b.wineid IS NULL;
+	
+CREATE VIEW winervw AS
+	SELECT b.wineid,
+	b.rating,
+	b.narrative,
+	a.uname,
+	a.uid
+	FROM usr a
+	JOIN review b
+	ON a.uid = b.uid
+	AND b.wineid > 0;
