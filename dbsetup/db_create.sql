@@ -54,7 +54,7 @@ CREATE VIEW winerating AS
 	AVG(rating) AS winerating
 	FROM review a
 	WHERE wineid > 0
-	GROUP BY wineid;
+	GROUP BY wineid, wineryid;
 	
 CREATE VIEW wineryrating AS
 	SELECT wineryid, 
