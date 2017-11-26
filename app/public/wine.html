@@ -1,3 +1,4 @@
+<% if(winename=='NULL'){winename = vintage+' '+varietal} %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,6 +63,8 @@
 	<div class="container-fluid">
 		<div class="mainrow row">
 			<div id="info" class="col">
+                <%=wineryname%>
+				<br>
 				<%=winename%>
 				<br>
 				<%=vintage%>
@@ -138,8 +141,8 @@
 			$.ajax({url: '/review', 
 				type: 'post',
 				data: {
-                    wineid: <%=wineid%>,
-                    wineryid: <%=wineryid%>,
+                    wineid: '<%=wineid%>',
+                    wineryid: '<%=wineryid%>',
 					rating: ratenum,
 					narrative: narr
 				}

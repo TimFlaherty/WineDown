@@ -156,7 +156,7 @@
 				type: 'post',
 				data: {
                     wineid: 'none',
-                    wineryid: <%=wineryid%>,
+                    wineryid: '<%=wineryid%>',
 					rating: ratenum,
 					narrative: narr
 				}
@@ -209,10 +209,18 @@
 					if (rating == null) {
 						rating = 'N/A';
 					};
+                    var vintage = data[i].vintage;
+					if (vintage == 0) {
+						vintage = 'NV';
+					};
+                    var winename = data[i].winename;
+					if (winename == 'NULL') {
+						winename = vintage +' '+data[i].varietal;
+					};
 					$('#winetarget').append('<div class="winerow row">'
 						+'<div class="wine col-5"><a href="wine?wineid='+data[i].wineid+'">'
-						+data[i].winename+'</a></div><div class="vintage col-2">'
-						+data[i].vintage+'</div><div class="varietal col-3">'
+						+winename+'</a></div><div class="vintage col-2">'
+						+vintage+'</div><div class="varietal col-3">'
 						+data[i].varietal+'</div><div class="winerating col-2">'
 						+rating+'</div></div>'
 					);
