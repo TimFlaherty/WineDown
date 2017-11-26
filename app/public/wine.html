@@ -155,7 +155,7 @@
         
         //Display wine reviews
         function winervws() {
-			$.ajax({url: '/winervw?wineid='+<%=wineid%>, 
+			$.ajax({url: '/winervw?wineid=<%=wineid%>', 
 				type: 'get',
 				}).done(function (data) {
 				if(data.length==0) {
@@ -184,7 +184,7 @@
     
     /* DISPLAY WINES */
     	function wines() {
-			$.ajax({url: '/wines?wineryid='+<%=wineryid%>, 
+			$.ajax({url: '/wines?wineryid=<%=wineryid%>', 
 				type: 'get',
 				}).done(function (data) {
 				for (i=0;i<data.length;i++) {
