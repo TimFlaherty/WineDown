@@ -9,8 +9,8 @@ USE winedown;
 CREATE TABLE winery (
 wineryid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT PRIMARY KEY,
 wineryname VARCHAR(40) NOT NULL,
-lat DECIMAL(10, 8) NOT NULL,
-lng DECIMAL(11, 8) NOT NULL,
+lat DECIMAL(10, 8),
+lng DECIMAL(11, 8),
 address VARCHAR(256) NOT NULL,
 hours VARCHAR(256),
 url VARCHAR(2083),
@@ -20,9 +20,9 @@ phone VARCHAR(15)
 CREATE TABLE wine (
 wineid INT(7) ZEROFILL NOT NULL AUTO_INCREMENT PRIMARY KEY,
 wineryid INT(6) ZEROFILL NOT NULL,
-winename VARCHAR(50) NOT NULL,
+winename VARCHAR(50),
 vintage INT(4),
-varietal VARCHAR(25),
+varietal VARCHAR(30) NOT NULL,
 FOREIGN KEY (wineryid) REFERENCES winery(wineryid)
 );
 
