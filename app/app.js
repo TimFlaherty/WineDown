@@ -16,8 +16,7 @@ var bcrypt = require('bcrypt-nodejs');
 // };
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
-var connection = mysql.createConnection('mysql://root:10Guitar74!@localhost/winedown');
-// var connection = mysql.createConnection('mysql://root:psswd@localhost/winedown');
+var connection = mysql.createConnection('mysql://root:psswd@localhost/winedown');
 
 //Declare app
 var app = express();
