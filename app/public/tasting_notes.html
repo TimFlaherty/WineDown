@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WineDown-Tasting Notes</title> 
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<link rel="stylesheet" href="lib/winedown.css" />
+	<link rel="stylesheet" href="lib/modal.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+	<!-- AJAX call checks cookies to see if user is logged in -->
+	<script>
+        //Check if user is logged in and load appropriate button
+		function logcheck(){
+			$.ajax({url: '/logcheck', 
+				type: 'get'
+			}).done(function (data) {
+                if (data == true) {
+                    $("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
+                } else if (data == false){
+                    var btn = "document.getElementById('id01').style.display='block'";
+                    $("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="'+btn+'">Login</button>');
+                }
+			});
+		}
+			
+		logcheck();
+		
+	</script>
+	<!-- Pre-load a loading GIF for AJAX calls but do not display --> 
+	<img src="lib/loading.gif" alt="Please wait..." style="display:none;">
+	
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <a class="navbar-brand" href="index.html">WineDown</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        	<span class="navbar-toggler-icon"></span>
+      	</button>
+      	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      		<ul class="navbar-nav mr-auto">
+      			<li class="nav-item">
+            		<a class="nav-link" href="learn_more.html">Learn</a>
+          		</li>
+				<li class="nav-item">
+            		<a class="nav-link" href="tasting_notes.html">Tasting Notes</a>
+          		</li>
+          		<li class="nav-item">
+            		<a class="nav-link" href="#">Help</a>
+          		</li>
+			</ul>
+			<div id="login"></div>
+		</div>
+    </nav>
+    
+    <div class="container-fluid">
+        <p><br><br></p>
+        <h1>Tasting Notes</h1>
+        
+        <p><br></p>
+    </div>
+    
+    <!-- Footer -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-bottom" style="height:25px; width:100%;">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <!-- <a class="nav-link" href="#">Footer</a> -->
+            </li>
+        </ul>
+    </nav>
+    
+    <!-- Modal Sign In Box, hidden by default -->
+    <div id="id01" class="modal">
+		<div class="modal-content animate">
+			<div class="modtainer">
+				<label><b>Username</b></label>
+				<input type="text" placeholder="Enter Username" id="uname" required>
+				
+				<label><b>Password</b></label>
+				<input type="password" placeholder="Enter Password" id="pwd" required>
+				<div id="addfield"></div>
+				<br>
+				<div id="modbutton"><button onclick="login()">Login</button></div>
+			</div>
+			<div id="resultmsg"></div>
+			<div class="modtainer" style="background-color:#f1f1f1">
+				<button type="button" onclick="modclose()" class="cancelbtn">Cancel</button>
+				<button type="button" onclick="create()" class="signup">Create Account</button>
+				<!--<span class="psw"><a href="#">Forgot password?</a></span>-->
+			</div>
+		</div>
+	</div>
+
+	<script>		
+		//User login function
+		function login(){
+			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
+			var name = $("#uname").val();
+			var pass = $("#pwd").val();
+			$.ajax({url: '/login', 
+				type: 'post',
+				data: {
+					uname: name,
+					pwd: pass
+				}
+			}).done(function (data) {
+				if(data == true) {
+					$("#login").html('<button class="btn btn-outline-danger my-2 my-sm-0" onclick="logout()">Log Out</button>');
+					modclose();
+				} else {
+					$("#resultmsg").html(data);
+				}
+			});
+		}
+		
+		//User logout function
+		function logout(){
+			$.ajax({url: '/logout', 
+				type: 'get'
+			}).done(function (data) {
+				var btn = "document.getElementById('id01').style.display='block'";
+				$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="'+btn+'" style="width:auto;">Login</button>');
+			});
+		}
+        
+        
+		//User signup function
+		function signup(){
+			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
+			var name = $("#uname").val();
+			var pass = $("#pwd").val();
+			var mail = $("#email").val();
+			$.ajax({url: '/signup', 
+				type: 'post',
+				data: {
+					uname: name,
+					pwd: pass,
+					email: mail
+				}
+			}).done(function (data) {
+				if(data == true) {
+					$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" style="width:auto;" onclick="logout()">Log Out</button>');
+					window.alert('Welcome to WineDown!');
+					logcheck();
+					modclose();
+				} else {
+					$("#resultmsg").html(data);
+				}
+			});
+		}
+        
+		
+        // Get the modal
+		var modal = document.getElementById('id01');
+		
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+		
+		function modclose() {
+			$('#id01').css('display','none');
+			$('#resultmsg').html('');
+			$('#addfield').html('');
+			$('#modbutton').html('<button onclick="login()">Log In</button>');
+		}
+        
+		//Displays user signup dialog in modal box
+		function create() {
+			$("#resultmsg").html('');
+			$("#addfield").html('<label><b>Email</b></label>'
+			+'<input type="text" placeholder="Enter Email" id="email" required>');
+			
+			$("#modbutton").html('<button onclick="signup()">Sign Up</button>');
+		}	
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+</html>
