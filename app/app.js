@@ -1,6 +1,6 @@
 //Include modules
 var http = require('http');
-var https = require('https');
+// var https = require('https');
 var fs = require('fs');
 var express = require('express');
 var serveStatic = require('serve-static');
@@ -10,13 +10,14 @@ var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 
 //Get SSL key & certificates from /certs folder
-var options = {
-	key: fs.readFileSync(__dirname+'/certs/server.key'),
-	cert: fs.readFileSync(__dirname+'/certs/server.crt')
-};
+// var options = {
+// 	key: fs.readFileSync(__dirname+'/certs/server.key'),
+// 	cert: fs.readFileSync(__dirname+'/certs/server.crt')
+// };
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
-var connection = mysql.createConnection('mysql://root@localhost/winedown');
+var connection = mysql.createConnection('mysql://root:10Guitar74!@localhost/winedown');
+// var connection = mysql.createConnection('mysql://root:psswd@localhost/winedown');
 
 //Declare app
 var app = express();
@@ -174,7 +175,7 @@ app.use(express.static(__dirname + '/public'));
 http.createServer(app).listen(3000);
 
 //Serve HTTPS to port 2000
-https.createServer(options, app).listen(2000);
+// https.createServer(options, app).listen(2000);
 
 //Serve to localhost:3000
 //app.listen(3000);
