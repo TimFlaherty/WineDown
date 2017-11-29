@@ -1,6 +1,6 @@
 //Include modules
 var http = require('http');
-// var https = require('https');
+var https = require('https');
 var fs = require('fs');
 var express = require('express');
 var serveStatic = require('serve-static');
@@ -10,13 +10,13 @@ var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 
 //Get SSL key & certificates from /certs folder
-// var options = {
-// 	key: fs.readFileSync(__dirname+'/certs/server.key'),
-// 	cert: fs.readFileSync(__dirname+'/certs/server.crt')
-// };
+//var options = {
+//	key: fs.readFileSync(__dirname+'/certs/server.key'),
+//	cert: fs.readFileSync(__dirname+'/certs/server.crt')
+//};
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
-var connection = mysql.createConnection('mysql://root:psswd@localhost/winedown');
+var connection = mysql.createConnection('mysql://root@localhost/winedown');
 
 //Declare app
 var app = express();
@@ -105,7 +105,7 @@ app.get('/winerypins', function (req, res) {
 
 //Get all varietals
 app.get('/opts', function (req, res) {
-	connection.query('SELECT DISTINCT varietal FROM wine', function(err, rows, fields) {
+	connection.query('SELECT DISTINCT varietal FROM wine ORDER BY varietal', function(err, rows, fields) {
 		res.send(rows);
 	});
 });
@@ -155,7 +155,7 @@ app.post('/review', function (req, res) {
 
 //Route and serve wine data to wine page template
 app.get('/wine', function (req, res) {
-	connection.query('SELECT * FROM wine WHERE wineid=' + req.query.wineid, function(err, rows, fields) {
+	connection.query('SELECT a.wineid, a.wineryid, a.winename, a.vintage, a.varietal, b.wineryname FROM wine a JOIN winery b ON a.wineryid = b.wineryid AND a.wineid=' + req.query.wineid, function(err, rows, fields) {
 		res.render(__dirname +'/public/wine.html', rows[0]);
 	});
 });
@@ -174,7 +174,7 @@ app.use(express.static(__dirname + '/public'));
 http.createServer(app).listen(3000);
 
 //Serve HTTPS to port 2000
-// https.createServer(options, app).listen(2000);
+//https.createServer(options, app).listen(2000);
 
 //Serve to localhost:3000
 //app.listen(3000);
