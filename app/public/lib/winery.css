@@ -1,7 +1,3 @@
-body {
-	padding-top: 60px;
-}
-
 #narrative {
 	width: 200px;
 	height: 150px;
@@ -49,10 +45,6 @@ body {
 @media (max-width: 1024px) {
 	.container-fluid { 
 		padding: 10px;
-	}
-	
-	body {
-		padding-top: 60px;
 	}
 	
 	.scrolly {

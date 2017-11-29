@@ -41,6 +41,15 @@ body {
 	padding:5px;
 }
 
+.modal-header, .modal-footer, .close, .close:hover {
+	background-color:#551033;
+	color:#FFFFFF;
+}
+
+.modal-content {
+	border-radius:15px;
+}
+
 /* Mobile */
 @media screen and (max-width:768px) {
 	html, body, #maptainer {
