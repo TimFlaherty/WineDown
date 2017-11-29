@@ -1,3 +1,9 @@
+.small_grey_italic {
+	color: grey;
+	font-size:smaller; 
+	font-style:italic;
+}
+
 body {
 	margin:0;
 }
