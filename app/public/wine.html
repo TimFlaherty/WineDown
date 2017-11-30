@@ -13,31 +13,12 @@ if(vintage==0){vintage = 'NV'};
     <link rel="icon" type="image/ico" href="images/favicon.ico">
     <link rel="stylesheet" href="lib/winery.css" />
     <link rel="stylesheet" href="lib/winedown.css" />
+    <script src="lib/wine.js"></script>
 </head>
 
 <body>
-	<!-- AJAX call checks cookies to see if user is logged in -->
-	<script>
-        //Check if user is logged in and load appropriate button
-		function logcheck(){
-			$.ajax({url: '/logcheck', 
-				type: 'get'
-			}).done(function (data) {
-                if (data == false) {
-					var btn = "document.getElementById('id01').style.display='block'";
-					$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" data-toggle="modal" data-target="#logmod">Login</button>');
-                    $("#rating").hide();
-                    $("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#logmod">Login to Review</button>');
-                } else if (data == true){
-                    $("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
-                    $("#rating").show();
-                    $("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="winereview()">Rate It!</button>');
-                }
-			});
-		}
-			
-		logcheck();
-        
+	<script>			
+		logcheck('<%=wineryid%>', '<%=wineid%>');
 	</script>
     
 	<!-- Pre-load a loading GIF for AJAX calls but do not display --> 
@@ -149,160 +130,14 @@ if(vintage==0){vintage = 'NV'};
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" onclick="create()">Create Account</button>
-					<div id="modbutton"><button type="button" class="btn btn-light" onclick="login()">Login</button></div>
+					<div id="modbutton"><button type="button" class="btn btn-light" onclick="login('<%=wineryid%>', '<%=wineid%>')">Login</button></div>
 				</div>
 			</div>
 	  	</div>
 	</div>
     
     <script>
-    /* USER REVIEW FUNCTIONS */
-        //New winery review
-        function winereview(){
-            $("#reviewbtn").html('<img src="lib/loading.gif" alt="Please wait...">');
-			var ratenum = $("#ratenum").val();
-			var narr = $("#narrative").val();
-			$.ajax({url: '/review', 
-				type: 'post',
-				data: {
-                    wineid: '<%=wineid%>',
-                    wineryid: '<%=wineryid%>',
-					rating: ratenum,
-					narrative: narr
-				}
-			}).done(function (data) {
-				if(data == true) {
-					$("#reviewbtn").html('COOL');
-				} else {
-					$("#reviewbtn").html(data);
-				}
-			});
-			winervws();
-        }
-        
-        //Display wine reviews
-        function winervws() {
-			$.ajax({url: '/winervw?wineid=<%=wineid%>', 
-				type: 'get',
-				}).done(function (data) {
-				if(data.length==0) {
-					$('#rvwtarget').html('Be the first to review!');
-					$('#rvwtarget').css('height', '100px');
-				} else {
-					for (i=0;i<data.length;i++) {
-						var rating = data[i].rating;
-						if (rating == null) {
-							rating = 'N/A';
-						};
-						$('#rvwtarget').append('<div class="rvwrow"><div class="row">'
-							+'<div class="rating col-4"><h5><b>Rating: </b>'
-							+rating+'</h5></div>'
-                            +'<div class="uname col-4"><a href="user?uname='+data[i].uname+'">'
-							+data[i].uname+'</a></div><div class="rvwdate col-4">'
-                            +data[i].rvwdate+'</div></div><div class="narrative row col">'
-							+data[i].narrative+'</div></div>'
-						);
-					};
-				};
-			});
-		}
-		
-		winervws();
-    
-    /* DISPLAY WINES */
-    	function wines() {
-			$.ajax({url: '/wines?wineryid=<%=wineryid%>', 
-				type: 'get',
-				}).done(function (data) {
-				for (i=0;i<data.length;i++) {
-					var rating = data[i].winerating;
-					if (rating == null) {
-						rating = 'N/A';
-					};
-					$('#winetarget').append('<div class="winerow row">'
-						+'<div class="wine col-5"><a href="wine?wineid='+data[i].wineid+'">'
-						+data[i].winename+'</a></div><div class="vintage col-2">'
-						+data[i].vintage+'</div><div class="varietal col-3">'
-						+data[i].varietal+'</div><div class="winerating col-2">'
-						+rating+'</div></div>'
-					);
-				};
-			});
-		}
-		
-		//wines();
-    
-    /* LOGIN-LOGOUT-SIGNUP FUNCTIONS */
-        //User login function
-		function login(){
-			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
-			var name = $("#uname").val();
-			var pass = $("#pwd").val();
-			$.ajax({url: '/login', 
-				type: 'post',
-				data: {
-					uname: name,
-					pwd: pass
-				}
-			}).done(function (data) {
-				if(data == true) {
-					$("#login").html('<button class="btn btn-outline-danger my-2 my-sm-0" onclick="logout()">Log Out</button>');
-					modclose();
-				} else {
-					$("#resultmsg").html(data);
-				}
-			});
-		}
-		
-		//User logout function
-		function logout(){
-			$.ajax({url: '/logout', 
-				type: 'get'
-			}).done(function (data) {
-				logcheck();
-			});
-		}
-        
-		//User signup function
-		function signup(){
-			$("#resultmsg").html('<img src="lib/loading.gif" alt="Please wait...">');
-			var name = $("#uname").val();
-			var pass = $("#pwd").val();
-			var mail = $("#email").val();
-			$.ajax({url: '/signup', 
-				type: 'post',
-				data: {
-					uname: name,
-					pwd: pass,
-					email: mail
-				}
-			}).done(function (data) {
-				if(data == true) {
-					$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" style="width:auto;" onclick="logout()">Log Out</button>');
-					window.alert('Welcome to WineDown!');
-					logcheck();
-					modclose();
-				} else {
-					$("#resultmsg").html(data);
-				}
-			});
-		}
-    
-        
-    /* MODAL BOX */
-        function modclose() {
-			$('#logmod').modal('hide');
-			$('#resultmsg').html('');
-			$('#addfield').html('');
-			$("#modbutton").html('<button type="button" class="btn btn-light" onclick="login()">Login</button>');
-		}
-        
-		//Displays user signup dialog in modal box
-		function create() {
-			$("#resultmsg").html('');
-			$("#addfield").html('<br><h6>Email</h6><input type="text" class="form-control" placeholder="Enter Email" id="email" required>');
-			$("#modbutton").html('<button class="btn btn-light" onclick="signup()">Sign Up</button>');
-		}	
+		winervws(<%=wineid%>);
 	</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
