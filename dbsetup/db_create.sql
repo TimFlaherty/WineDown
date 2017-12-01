@@ -127,7 +127,7 @@ CREATE VIEW profile AS
 	b.wineryid,
 	b.wineid,
 	b.rating,
-	b.rvwdate,
+	DATE_FORMAT(b.rvwdate, "%M %d, %Y") AS rvwdate,
 	b.narrative,
 	c.winename,
 	d.wineryname

@@ -138,6 +138,8 @@ app.post('/review', function (req, res) {
 	var wineryid = req.body.wineryid;
 	var rating = req.body.rating;
 	var narrative = req.body.narrative;
+	console.log('newone');
+	console.log(wineryid);
 	//Differentiate between wine and winery reviews
 	if (wineid == 'none') {
 		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES (NULL, "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'", CURDATE(), CURTIME())';
@@ -167,11 +169,25 @@ app.get('/winervw', function (req, res) {
 	});
 });
 
+//Route and serve user data to profile page template
+app.get('/user', function (req, res) {
+	connection.query('SELECT uid, uname FROM usr WHERE uname = "' + req.query.uname + '"', function(err, rows, fields) {
+		res.render(__dirname +'/public/user.html', rows[0]);
+	});
+});
+
+//Get user reviews for profile
+app.get('/userrvws', function (req, res) {
+	connection.query('SELECT * FROM profile WHERE uid='+req.query.uid, function(err, rows, fields) {
+		res.send(rows);
+	});
+});
+
 //Static file server for files in the /public folder
 app.use(express.static(__dirname + '/public'));
 
 //Serve HTTP to port 3000
-http.createServer(app).listen(3000);
+http.createServer(app).listen(80);
 
 //Serve HTTPS to port 2000
 //https.createServer(options, app).listen(2000);
