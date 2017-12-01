@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>WineDown-Tasting Notes</title> 
+	<title>WineDown-Learn</title> 
 	<meta charset="utf-8" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,10 +26,10 @@
       	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
       		<ul class="navbar-nav mr-auto">
       			<li class="nav-item">
-            		<a class="nav-link" href="learn_more.html">Learn</a>
+            		<a class="nav-link" href="#">Learn</a>
           		</li>
 				<li class="nav-item">
-            		<a class="nav-link" href="#">Tasting Notes</a>
+            		<a class="nav-link" href="tasting_notes.html">Tasting Notes</a>
           		</li>
           		<li class="nav-item">
             		<a class="nav-link" href="#">Help</a>
@@ -38,22 +38,74 @@
 			<div id="login"></div>
 		</div>
     </nav>
+
     <div class="container margin-top-bottom">
-		<div class="row">
-			<div class="col-sm-8">
-				<h1>Tasting Notes</h1>
-				<p>Rosé all day? Red in bed? Do you like white wine in the night time? Discover why you love your wines by paying attention to these important cues.</p>
-				<p><strong>Name</strong><br>Of course the name! You don't want to forget this delicious glass of wine, do you?</p>
-				<p><strong>Appearance</strong><br>Peer into the looking glass. What do you see?<br><span class="small_grey_italic">e.g. watery, clear, pale yellow, straw, golden, bright berry, purple, dark purple, crimson red, garnet, brownish, cloudy</span></p>
-				<p><strong>Nose</strong><br> Is it fresh? Floral? Fruity? Foxy? How does it smell to you?<br><span class="small_grey_italic">e.g. floral, herbal, perfumed, citrusy, vanilla, buttery, spicy, smoky, leathery, funky, grassy, meaty, musty</span></p>
-				<p><strong>Taste</strong><br> Is your mouth filled with that 'lovin feelin'?<br><span class="small_grey_italic">e.g. plummy, fruity, flowery, clean, peppery, earthy, acidic, tannic, luscious, long, balanced, full, flowery, sexy, velvety, powerful</span></p>
-				<p><strong>Rating</strong><br> Hot or not, or 1-100, all that matters is how bad you wanna do this again.</p>
-			</div>
-			<div class="col-sm-4"></div>
-		</div>
-	</div>
-    
-    <!-- Footer -->
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <h1>Contact us!</h1>
+                <p>Did you just discover some awesome winery that we seem to have missed? Are you just dying to tell us how much
+                    you <3 <br>the app? Let us know below!</p>
+                
+                <!-- TODO: implement contact.php -->
+                <form id="contact-form" method="POST" action="contact.php" role="form">
+                        
+                    <div class="messages"></div>
+
+                    <div class="controls">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="form_name">Firstname *</label>
+                                    <input id="form_name" type="text" name="name" class="form-control" placeholder="Name, please *" required="required"
+                                        data-error="Firstname is required.">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="form_email">Email *</label>
+                                    <input id="form_email" type="email" name="email" class="form-control" placeholder="Email, please *" required="required"
+                                        data-error="Valid email is required.">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="form_message">Message *</label>
+                                    <textarea id="form_message" name="message" class="form-control" placeholder="What's on your mind? *" rows="4" required="required"
+                                        data-error="Please,leave us a message."></textarea>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <!--
+                                     
+                                    <input type="submit" class="btn btn-success btn-send" value="Send message"> 
+                                    Below is a placeholder for the above code until we get the form submission working
+                                -->
+                                <input type="submit" class="btn btn-success">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="text-muted">
+                                    <strong>*</strong> These fields are required.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+     <!-- Footer -->
     
 	<nav class="navbar navbar-expand-md navbar-dark fixed-bottom justify-content-center">
         
@@ -69,7 +121,7 @@
       			
 				<li class="nav-item">
             		
-					<a class="nav-link" href="suggestions.html">Suggestions?</a>
+					<a class="nav-link" href="#">Suggestions?</a>
           		
 				</li>
 				
@@ -81,7 +133,7 @@
           		
 				<li class="nav-item">
             		
-					<a class="nav-link" href=contact.html">Contact</a>
+					<a class="nav-link" href="contact.html">Contact</a>
           		
 				</li>
 			
