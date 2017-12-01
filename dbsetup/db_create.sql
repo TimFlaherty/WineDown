@@ -120,3 +120,21 @@ CREATE VIEW winervw AS
 	JOIN review b
 	ON a.uid = b.uid
 	AND b.wineid > 0;
+	
+CREATE VIEW profile AS
+	SELECT a.uid,
+	a.uname,
+	b.wineryid,
+	b.wineid,
+	b.rating,
+	DATE_FORMAT(b.rvwdate, "%M %d, %Y") AS rvwdate,
+	b.narrative,
+	c.winename,
+	d.wineryname
+	FROM usr a
+	JOIN review b
+	ON a.uid = b.uid
+	LEFT JOIN wine c
+	ON b.wineid = c.wineid
+	JOIN winery d
+	ON b.wineryid = d.wineryid;

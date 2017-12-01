@@ -138,6 +138,8 @@ app.post('/review', function (req, res) {
 	var wineryid = req.body.wineryid;
 	var rating = req.body.rating;
 	var narrative = req.body.narrative;
+	console.log('newone');
+	console.log(wineryid);
 	//Differentiate between wine and winery reviews
 	if (wineid == 'none') {
 		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES (NULL, "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'", CURDATE(), CURTIME())';
@@ -163,6 +165,20 @@ app.get('/wine', function (req, res) {
 //Get wine reviews
 app.get('/winervw', function (req, res) {
 	connection.query('SELECT * FROM winervw WHERE wineid='+req.query.wineid, function(err, rows, fields) {
+		res.send(rows);
+	});
+});
+
+//Route and serve user data to profile page template
+app.get('/user', function (req, res) {
+	connection.query('SELECT uid, uname FROM usr WHERE uname = "' + req.query.uname + '"', function(err, rows, fields) {
+		res.render(__dirname +'/public/user.html', rows[0]);
+	});
+});
+
+//Get user reviews for profile
+app.get('/userrvws', function (req, res) {
+	connection.query('SELECT * FROM profile WHERE uid='+req.query.uid, function(err, rows, fields) {
 		res.send(rows);
 	});
 });
