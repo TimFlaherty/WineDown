@@ -16,7 +16,6 @@ function userrvws(id) {
 				if (wineid == null) {
 					 wname = wineryurl;
 				};
-				console.log(wname);
 				$('#rvwtarget').append('<div class="rvwrow">'
 					+'<div class="row"><div class="rating col-6"><h5><b>'
 					+wname+'</b></h5></div><div class="uname col-2">'

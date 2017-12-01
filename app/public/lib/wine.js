@@ -1,5 +1,6 @@
 //Check if user is logged in and load appropriate button
 function logcheck(id1, id2){
+	id1 = parseInt(id1);
 	$.ajax({url: '/logcheck', 
 		type: 'get'
 	}).done(function (data) {
