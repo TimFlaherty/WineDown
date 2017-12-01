@@ -187,7 +187,7 @@ app.get('/userrvws', function (req, res) {
 app.use(express.static(__dirname + '/public'));
 
 //Serve HTTP to port 3000
-http.createServer(app).listen(80);
+http.createServer(app).listen(3000);
 
 //Serve HTTPS to port 2000
 //https.createServer(options, app).listen(2000);
