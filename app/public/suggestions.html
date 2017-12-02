@@ -39,31 +39,22 @@
 		</div>
     </nav>
 
-    <div class="container margin-top-bottom">
+    <div class="container-fluid margin-top-bottom">
         <div class="row">
-            <div class="col-sm-8 col-sm-offset-4">
-                <h1>Suggestions</h1>
-                <p>See something we missed?</p>
+			<div class="col-sm-4 col-lg-4"></div>
+			<div class="col-sm-4 col-lg-4">
+				<div class="text-center">
+					<h1>Suggestions</h1>
+					<p>See something we've missed?</p>
+				</div>
 			</div>
-
+			<div class="col-sm-4 col-lg-4"></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3"></div>
 			<div class="col-sm-6">
 				
-				<button type="button" class="btn btn-info btn-block btn-lg" data-toggle="collapse" data-target="#suggest-wine" style="margin-top: 10px; margin-bottom: 10px;">Wine</button>
-				<div id="suggest-wine" class="collapse" style="margin-bottom: 10px;">
-					
-					<div class="form-group">
-						<input type="text" class="form-control" id="winename" placeholder="Name of the wine:">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="vintage" placeholder="Vintage:">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="varietal" placeholder="Varietal:">
-					</div>
-					<button type="submit" class="btn btn-default">Submit</button>
-				</div>
-				
-				<button type="button" class="btn btn-info btn-block btn-lg" data-toggle="collapse" data-target="#suggest-winery" style="margin-bottom: 10px;">Winery</button>
+				<button type="button" class="btn btn-info btn-block btn-lg" data-toggle="collapse" data-target="#suggest-winery" style="margin-top: 10px; margin-bottom: 10px;">add your favorite winery</button>
 				<div id="suggest-winery" class="collapse" style="margin-bottom: 10px;">
 					<div class="form-group">
 						<input type="text" class="form-control" id="wineryname" placeholder="Name:">
@@ -82,10 +73,28 @@
 					</div>
 					<button type="submit" class="btn btn-default">Submit</button>
 				</div>
+
+				<button type="button" class="btn btn-info btn-block btn-lg" data-toggle="collapse" data-target="#suggest-wine" style="margin-top: 10px; margin-bottom: 10px;">add your favorite wine</button>
+				<div id="suggest-wine" class="collapse" style="margin-bottom: 10px;">
+					
+					<div class="form-group">
+						<input type="text" class="form-control" id="winename" placeholder="Name of the wine:">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="vintage" placeholder="Vintage:">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="varietal" placeholder="Varietal:">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</div>
 				
-				<a href="contact.html" role="button" class="btn btn-info btn-block btn-lg">Other</a>
+				
+				<a href="contact.html" role="button" class="btn btn-info btn-block btn-lg">want something else?</a>
 
 			</div>
+
+		</div>
 			
 
 		</div>

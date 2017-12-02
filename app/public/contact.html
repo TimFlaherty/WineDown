@@ -42,8 +42,10 @@
     <div class="container margin-top-bottom">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
-                <h1>Contact us!</h1>
-                <p>Dying to let us know how much you <3 WineDown? Tell us how you really feel ;)</p>
+				<div class="text-center">
+					<h1>Talk to me...</h1>
+					<p>Dying to share how much you <3 WineDown?<br>I want to hear all about it ;)</p>
+				</div>
                 
                 <!-- TODO: implement contact.php -->
                 <form id="contact-form" method="POST" action="contact.php" role="form">
@@ -55,9 +57,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="form_name">Firstname *</label>
-                                    <input id="form_name" type="text" name="name" class="form-control" placeholder="Name, please *" required="required"
-                                        data-error="Firstname is required.">
+                                    <label for="form_name">First name *</label>
+                                    <input id="form_name" type="text" name="name" class="form-control" placeholder="Jane " required="required"
+                                        data-error="First name is required.">
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
@@ -66,7 +68,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="form_email">Email *</label>
-                                    <input id="form_email" type="email" name="email" class="form-control" placeholder="Email, please *" required="required"
+                                    <input id="form_email" type="email" name="email" class="form-control" placeholder="jane@mail.com " required="required"
                                         data-error="Valid email is required.">
                                     <div class="help-block with-errors"></div>
                                 </div>
@@ -76,31 +78,29 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="form_message">Message *</label>
-                                    <textarea id="form_message" name="message" class="form-control" placeholder="What's on your mind? *" rows="4" required="required"
+                                    <textarea id="form_message" name="message" class="form-control" placeholder="I <3 WineDown because..." rows="4" required="required"
                                         data-error="Please,leave us a message."></textarea>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+							<div class="row">
+								<div class="col-md-12">
+									<p class="text-muted">
+										<strong>*</strong> These fields are required.
+									</p>
+								</div>
+							</div>
+                            <div class="col-md-12" align="center">
                                 <!--
                                      
                                     <input type="submit" class="btn btn-success btn-send" value="Send message"> 
                                     Below is a placeholder for the above code until we get the form submission working
                                 -->
-                                <input type="submit" class="btn btn-success">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="text-muted">
-                                    <strong>*</strong> These fields are required.
-                                </p>
+                                <input type="submit" class="btn btn-success" value="Send">
                             </div>
                         </div>
                     </div>
-
                 </form>
-
             </div>
         </div>
     </div>
