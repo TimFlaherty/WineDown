@@ -17,6 +17,11 @@ body {
 	background-color:#551033;
 }
 
+.btn-info {
+	background-color: #1fa85f;
+	color: #F8DDEB;
+}
+
 #maptainer {
 	width:100%;
 	height:850px;
