@@ -46,12 +46,10 @@
     	<div id="pagerow" class="row">
 			<div class="left col-lg-auto">
                 <div class="row">
-                    <div class="col-xs-auto">
-                        <select style="width: 137.83px;" id="opts"></select>
-                    </div>
-                    <div class="col-xs-auto">
-                        <button class="btn btn-outline-success" onclick="filter()">Filter by Varietal</button>
-                    </div>
+                    <h5>Filter by Varietal</h5>
+                </div>
+                <div class="row">
+                    <select id="opts" onchange="filter()"></select>
                 </div>
 			</div>
 			<div id="map" class="col-12 col-lg-auto"></div>
