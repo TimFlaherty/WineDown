@@ -49,7 +49,7 @@
 	<!-- Filter dropdowns -->
 	<div id="maptainer" class="container-fluid">
 		<div id="pagerow" class="row">
-			<div class="left col-lg-auto">
+			<div class="left col">
 				<div class="row">
 					<h5>Filter by Varietal</h5>
 				</div>
@@ -66,6 +66,10 @@
 						<option value="all">All Wineries</option>
 					</select>
 				</div>
+				<div class="row">
+					<div id="listbtn"><button class="btn btn-outline-success" onclick="nearby()">List Nearby Wineries</button></div>
+				</div>
+				<div id="list"></div>
 			</div>
 			<div id="map" class="col-12 col-lg-auto"></div>
 			<div class="right col">Ads?</div>
