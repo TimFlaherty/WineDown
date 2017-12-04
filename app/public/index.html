@@ -41,6 +41,22 @@
 				<li class="nav-item">
 					<a class="nav-link" href="#">Help</a>
 				</li>
+				<li class="nav-item">
+					<button type="button" class="btn navbar nav-link dropdown-toggle" type="button" data-toggle="dropdown">Filter by...
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu" style="background-color: #551033;">
+						<li class="navbar">
+							<select id="opts" onchange="filter()">
+								<option value="all">All Varietals</option>						
+							</select>
+						</li>
+						<li class="navbar">
+							<select id="optnames" onchange="filterWineryName()">
+								<option value="all">All Wineries</option>
+							</select>
+						</li>
+					</ul>
+				</li>
 			</ul>
 			<div id="login"></div>
 		</div>
@@ -49,25 +65,8 @@
 	<!-- Filter dropdowns -->
 	<div id="maptainer" class="container-fluid">
 		<div id="pagerow" class="row">
-			<div class="left col-lg-auto">
-				<div class="row">
-					<h5>Filter by Varietal</h5>
-				</div>
-				<div class="row">
-					<select id="opts" onchange="filter()">
-						<option value="all">All Varietals</option>						
-					</select>
-				</div>
-				<div class="row">
-					<h5>Filter by Winery</h5>
-				</div>
-				<div class="row">
-					<select id="optnames" onchange="filterWineryName()">
-						<option value="all">All Wineries</option>
-					</select>
-				</div>
-			</div>
 			<div id="map" class="col-12 col-lg-auto"></div>
+			<div class="left col-lg-auto">
 			<div class="right col">Ads?</div>
 		</div>
 	</div>
