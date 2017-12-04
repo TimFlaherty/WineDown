@@ -16,7 +16,7 @@ var bcrypt = require('bcrypt-nodejs');
 //};
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
-var connection = mysql.createConnection('mysql://user:password@localhost/winedown');
+var connection = mysql.createConnection('mysql://root@localhost/winedown');
 
 //Declare app
 var app = express();
@@ -201,6 +201,18 @@ app.get('/user', function (req, res) {
 //Get user reviews for profile
 app.get('/userrvws', function (req, res) {
 	connection.query('SELECT * FROM profile WHERE uid=' + req.query.uid, function (err, rows, fields) {
+		res.send(rows);
+	});
+});
+
+//Get nearby wineries
+app.get('/nearby', function (req, res) {
+	var sql = 'SELECT wineryid, wineryname, lat, lng, hours, varietals, wineryrating,'
+		+ 'ROUND(3959 * acos(cos(radians(' + req.query.lat
+		+ ')) * cos(radians(lat)) * cos(radians(lng) - radians(' + req.query.long
+		+ ')) + sin(radians(' + req.query.lat + ')) * sin(radians(lat ))), 1) AS distance '
+		+ 'FROM winerypins GROUP BY wineryid ORDER BY distance LIMIT 5;';
+	connection.query(sql, function(err, rows, fields) {
 		res.send(rows);
 	});
 });
