@@ -16,7 +16,7 @@ var bcrypt = require('bcrypt-nodejs');
 //};
 
 //Enter db credentials here as ('mysql://username:password@host/database'):
-var connection = mysql.createConnection('mysql://root@localhost/winedown');
+var connection = mysql.createConnection('mysql://user:password@localhost/winedown');
 
 //Declare app
 var app = express();
@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.use(cookieParser());
 
 //Declare database connection
-connection.connect(function(err) {
+connection.connect(function (err) {
 	if (err) throw err
 });
 
@@ -42,30 +42,30 @@ app.post('/signup', function (req, res) {
 	var uname = req.body.uname;
 	var pwd = req.body.pwd;
 	var email = req.body.email;
-	bcrypt.hash(pwd, null, null, function(err, hash) {
-		connection.query('INSERT INTO usr(uname, pwd, email) VALUES ("'+uname+'", "'+hash+'", "'+email+'")', function(err, rows, fields) {
+	bcrypt.hash(pwd, null, null, function (err, hash) {
+		connection.query('INSERT INTO usr(uname, pwd, email) VALUES ("' + uname + '", "' + hash + '", "' + email + '")', function (err, rows, fields) {
 			if (err) {
 				res.send('Username already taken, sorry!')
 			} else {
 				var uid = rows.insertId;
-				res.cookie('winedown', {user:uid}).send(true);
+				res.cookie('winedown', { user: uid }).send(true);
 			}
 		});
 	});
 });
 
 //User login; returns cookie with user id
-app.post('/login', function (req, res) {	
+app.post('/login', function (req, res) {
 	var uname = req.body.uname;
 	var pwd = req.body.pwd;
-	connection.query('SELECT uid, pwd FROM usr WHERE uname = "' + uname + '"', function(err, rows, fields) {
+	connection.query('SELECT uid, pwd FROM usr WHERE uname = "' + uname + '"', function (err, rows, fields) {
 		if (Object.keys(rows).length == 0) {
 			res.send('Please enter a valid username.');
 		} else {
-			bcrypt.compare(pwd, rows[0].pwd, function(err, match) {
+			bcrypt.compare(pwd, rows[0].pwd, function (err, match) {
 				if (match == true) {
 					var uid = rows[0].uid;
-					res.cookie('winedown', {user:uid}).send(true);
+					res.cookie('winedown', { user: uid }).send(true);
 				} else {
 					res.send('Incorrect Password');
 				}
@@ -82,7 +82,7 @@ app.get('/logout', function (req, res) {
 //Checks for user cookie and sends appropriate button
 app.get('/logcheck', function (req, res) {
 	var cookies = JSON.stringify(req.cookies);
-	if (cookies.includes('winedown')){
+	if (cookies.includes('winedown')) {
 		res.send(true);
 	} else {
 		res.send(false);
@@ -90,43 +90,65 @@ app.get('/logcheck', function (req, res) {
 });
 
 //Get winery data for map pin
+//used by filter() and filterWineryName() in wdmap.js
 app.get('/winerypins', function (req, res) {
-	var varietal = req.query.varietal;
-	if (varietal == 'all') {
-		connection.query('SELECT * FROM winerypins', function(err, rows, fields) {
-			res.send(rows);
-		})
-	} else {
-		connection.query('SELECT * FROM winerypins WHERE varietal="'+varietal+'" GROUP BY wineryid', function(err, rows, fields) {
-			res.send(rows);
-		})
+	if (req.query.varietal !== undefined) {	//for varietal filter
+		var varietal = req.query.varietal;
+		if (varietal == 'all') {
+			connection.query('SELECT * FROM winerypins', function (err, rows, fields) {
+				res.send(rows);
+			})
+		} else {
+			connection.query('SELECT * FROM winerypins WHERE varietal="' + varietal + '" GROUP BY wineryid', function (err, rows, fields) {
+				res.send(rows);
+			})
+		}
+	}
+	else if (req.query.wineryname !== undefined){ //for wineryname filter
+		var wineryname = req.query.wineryname; 
+		if (wineryname == 'all') {
+			connection.query('SELECT * FROM winerypins', function (err, rows, fields) {
+				res.send(rows);
+			})
+		} else {
+			connection.query('SELECT * FROM winerypins WHERE wineryname="' + wineryname +'"', function (err, rows, fields) {
+				res.send(rows);
+			})
+		}
 	}
 });
 
 //Get all varietals
 app.get('/opts', function (req, res) {
-	connection.query('SELECT DISTINCT varietal FROM wine ORDER BY varietal', function(err, rows, fields) {
+	connection.query('SELECT DISTINCT varietal FROM wine ORDER BY varietal', function (err, rows, fields) {
+		res.send(rows);
+	});
+});
+
+//Get all winery names for selector() in wdmap.js
+app.get('/optnames', function (req, res) {
+	connection.query('SELECT wineryname FROM winery', function (err, rows, fields) {
 		res.send(rows);
 	});
 });
 
 //Route and serve winery data to winery profile template page
 app.get('/winery', function (req, res) {
-	connection.query('SELECT * FROM winery WHERE wineryid=' + req.query.wineryid, function(err, rows, fields) {
-		res.render(__dirname +'/public/winery.html', rows[0]);
+	connection.query('SELECT * FROM winery WHERE wineryid=' + req.query.wineryid, function (err, rows, fields) {
+		res.render(__dirname + '/public/winery.html', rows[0]);
 	});
 });
 
 //Get wines by wineryid
 app.get('/wines', function (req, res) {
-	connection.query('SELECT * FROM wines WHERE wineryid='+req.query.wineryid, function(err, rows, fields) {
+	connection.query('SELECT * FROM wines WHERE wineryid=' + req.query.wineryid, function (err, rows, fields) {
 		res.send(rows);
 	});
 });
 
 //Get winery reviews
 app.get('/wineryrvw', function (req, res) {
-	connection.query('SELECT * FROM wineryrvw WHERE wineryid='+req.query.wineryid, function(err, rows, fields) {
+	connection.query('SELECT * FROM wineryrvw WHERE wineryid=' + req.query.wineryid, function (err, rows, fields) {
 		res.send(rows);
 	});
 });
@@ -142,11 +164,11 @@ app.post('/review', function (req, res) {
 	console.log(wineryid);
 	//Differentiate between wine and winery reviews
 	if (wineid == 'none') {
-		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES (NULL, "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'", CURDATE(), CURTIME())';
+		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES (NULL, "' + wineryid + '", "' + uid + '", "' + rating + '", "' + narrative + '", CURDATE(), CURTIME())';
 	} else {
-		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES ("'+wineid+'", "'+wineryid+'", "'+uid+'", "'+rating+'", "'+narrative+'", CURDATE(), CURTIME())';
+		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES ("' + wineid + '", "' + wineryid + '", "' + uid + '", "' + rating + '", "' + narrative + '", CURDATE(), CURTIME())';
 	}
-	connection.query(sql, function(err, rows, fields) {
+	connection.query(sql, function (err, rows, fields) {
 		if (err) {
 			res.send('Something went wrong, sorry!')
 		} else {
@@ -157,28 +179,28 @@ app.post('/review', function (req, res) {
 
 //Route and serve wine data to wine page template
 app.get('/wine', function (req, res) {
-	connection.query('SELECT a.wineid, a.wineryid, a.winename, a.vintage, a.varietal, b.wineryname FROM wine a JOIN winery b ON a.wineryid = b.wineryid AND a.wineid=' + req.query.wineid, function(err, rows, fields) {
-		res.render(__dirname +'/public/wine.html', rows[0]);
+	connection.query('SELECT a.wineid, a.wineryid, a.winename, a.vintage, a.varietal, b.wineryname FROM wine a JOIN winery b ON a.wineryid = b.wineryid AND a.wineid=' + req.query.wineid, function (err, rows, fields) {
+		res.render(__dirname + '/public/wine.html', rows[0]);
 	});
 });
 
 //Get wine reviews
 app.get('/winervw', function (req, res) {
-	connection.query('SELECT * FROM winervw WHERE wineid='+req.query.wineid, function(err, rows, fields) {
+	connection.query('SELECT * FROM winervw WHERE wineid=' + req.query.wineid, function (err, rows, fields) {
 		res.send(rows);
 	});
 });
 
 //Route and serve user data to profile page template
 app.get('/user', function (req, res) {
-	connection.query('SELECT uid, uname FROM usr WHERE uname = "' + req.query.uname + '"', function(err, rows, fields) {
-		res.render(__dirname +'/public/user.html', rows[0]);
+	connection.query('SELECT uid, uname FROM usr WHERE uname = "' + req.query.uname + '"', function (err, rows, fields) {
+		res.render(__dirname + '/public/user.html', rows[0]);
 	});
 });
 
 //Get user reviews for profile
 app.get('/userrvws', function (req, res) {
-	connection.query('SELECT * FROM profile WHERE uid='+req.query.uid, function(err, rows, fields) {
+	connection.query('SELECT * FROM profile WHERE uid=' + req.query.uid, function (err, rows, fields) {
 		res.send(rows);
 	});
 });
