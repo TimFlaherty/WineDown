@@ -75,6 +75,7 @@ CREATE VIEW winerypins AS
 	a.lat, 
 	a.lng, 
 	a.hours, 
+	a.address,
 	b.varietal,
 	d.varietals,
 	c.wineryrating

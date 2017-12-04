@@ -131,6 +131,10 @@ function pins(x) {
 				+ varietals
 				+ "<br><br><b>WineDown Rating: </b><br>"
 				+ rating
+				+ "<br><br><a href='https://www.google.com/maps/dir/?api=1&destination=" 
+				+ escape(data[i].wineryname) + ",+"  
+				+ escape(data[i].address)
+				+ "'target='_blank'>Directions</a>"
 				);
 
 			markers.addLayer(marker);
@@ -171,7 +175,7 @@ function selector() {
 
 //for filtering pins, specifies categories
 function filter() {
-	pins('varietal=' + $('#opts').val() );
+	pins('varietal=' + $('#opts').val());
 }
 function filterWineryName() {
 	pins('wineryname=' + $('#optnames').val());
