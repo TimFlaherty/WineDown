@@ -5,7 +5,8 @@ const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 });
 
 // Declare map variables
-var map, usrlat, usrlong;
+var map, usrlat, usrlong
+var locmarker = new L.marker();
 
 //Declare global variable for map pins
 var markers = new L.FeatureGroup();
@@ -28,8 +29,11 @@ function mapit() {
 
 		//Declare function to add pin at user location
 		function onLocationFound(e) {
-			L.marker(e.latlng).addTo(map)
+			locmarker.remove();
+			locmarker = new L.marker(e.latlng).addTo(map)
 				.bindPopup("You are here");
+			usrlat = e.latlng.lat;
+			usrlong = e.latlng.lng;
 		}
 
 		// Add location pin to map
@@ -66,7 +70,7 @@ function mapit() {
 
 	map.addControl(new locator());
 
-	// HTML5 geolocation.
+	// HTML5 geolocation on pageload
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			usrlat = position.coords.latitude,
@@ -81,7 +85,18 @@ function mapit() {
 		// Browser doesn't support Geolocation
 		handleLocationError(false, alert('Bad!'));
 	}
-
+	
+	// User location selection on map click
+	function addMarker(e){
+		locmarker.remove();
+		locmarker = new L.marker(e.latlng).addTo(map)
+			.bindPopup("Searching from here");
+		usrlat = e.latlng.lat;
+		usrlong = e.latlng.lng;		
+	}
+	
+	map.on('click', addMarker);
+	
 	// MAP SEARCH FUNCTIONALITY
 	// Initialize Google maps geocoder
 	var geocoder = new google.maps.Geocoder();
@@ -223,7 +238,7 @@ function nearby() {
 				+ "</div><div class='col-lg-6'><b>Tasting Room Hours:</b><br>" 
 				+ data[i].hours
 				+ "<br><br><b>Varietals:</b><br>"
-				+ varietals +"</div></div><br><br>"
+				+ varietals +"</div></div>"
 			);
 		};
 	});
