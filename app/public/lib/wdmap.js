@@ -166,7 +166,7 @@ function pins(x) {
 				+ linkaddr
 				+ "' target='_blank'>Directions</a>"
 				);
-
+			
 			markers.addLayer(marker);
 			map.addLayer(markers);
 		};
@@ -202,7 +202,7 @@ function selector() {
 
 //for filtering pins, specifies categories
 function filter() {
-	pins('varietal=' + $('#opts').val() );
+	pins('varietal=' + $('#opts').val());
 }
 function filterWineryName() {
 	pins('wineryname=' + $('#optnames').val());
