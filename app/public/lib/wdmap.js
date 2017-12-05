@@ -72,8 +72,8 @@ function mapit() {
 			usrlat = position.coords.latitude,
 			usrlong = position.coords.longitude
 			
-			map.setView([usrlat, usrlong], 12);
-			L.marker([usrlat, usrlong]).addTo(map);
+			//map.setView([usrlat, usrlong], 12);
+			//L.marker([usrlat, usrlong]).addTo(map);
 		}, function() {
 			handleLocationError(true, alert('Good!'));
 		});
@@ -126,6 +126,8 @@ function pins(x) {
 		type: 'get',
 	}).done(function (data) {
 		for (i = 0; i < data.length; i++) {
+			var linkaddr = data[i].address.split(' ').join('+');
+			
 			//If there is no winery rating available, display message
 			var rating = data[i].wineryrating;
 			if (rating == null) {
@@ -145,6 +147,9 @@ function pins(x) {
 				+ varietals
 				+ "<br><br><b>WineDown Rating: </b><br>"
 				+ rating
+				+ "<br><br><a href='https://www.google.com/maps/dir/?api=1&destination=" 
+				+ linkaddr
+				+ "' target='_blank'>Directions</a>"
 				);
 
 			markers.addLayer(marker);
@@ -193,10 +198,12 @@ function nearby() {
 	$.ajax({url: '/nearby?lat='+usrlat+'&long='+usrlong, 
 		type: 'get',
 		}).done(function (data) {
+		$('.left').removeClass('hideleft');
 		$('#map').addClass('listmap');
 		$('#list').html('');
 		for (i=0;i<data.length;i++) {
-			$('#listbtn').html('<button class="btn btn-outline-success" onclick="nolist()">Collapse List</button>');
+			var maplink = '"wineryname='+encodeURI(data[i].wineryname)+'"';
+			$('#listbtn').html('<button class="btn btn-outline-light w-100" onclick="nolist()">Hide</button>');
 			//If there is no winery rating available, display message
 			var rating = data[i].wineryrating;
 			if (rating == null) {
@@ -208,14 +215,15 @@ function nearby() {
 				varietals = "Be the first to review!";
 			}
 
-			$('#list').append("<a href='winery?wineryid="+data[i].wineryid+"'><h3>"+data[i].wineryname+"</h3></a>"
+			$('#list').append("<div class='row entry'><div class='col-lg-6'><a href='winery?wineryid="+data[i].wineryid+"'><h3>"+data[i].wineryname+"</h3></a>"
 				+ data[i].distance + "&nbsp;Miles Away<br>"
-				+ "<b>Tasting Room Hours:</b><br>" 
+				+ "<a href='#' onclick='pins("+maplink+"); if($(window).width()<768){nolist();}'>Show on Map</a><br>"
+				+ "<b>WineDown Rating: </b><br>"
+				+ rating
+				+ "</div><div class='col-lg-6'><b>Tasting Room Hours:</b><br>" 
 				+ data[i].hours
 				+ "<br><br><b>Varietals:</b><br>"
-				+ varietals
-				+ "<br><br><b>WineDown Rating: </b><br>"
-				+ rating +'<br><br>'
+				+ varietals +"</div></div><br><br>"
 			);
 		};
 	});
@@ -225,5 +233,6 @@ function nearby() {
 function nolist() {
 	$('#list').html('');
 	$('#map').removeClass('listmap');
-	$('#listbtn').html('<button class="btn btn-outline-success" onclick="nearby()">List Nearby Wineries</button>');
+	$('.left').addClass('hideleft');
+	$('#listbtn').html('<button class="btn btn-outline-light w-100" onclick="nearby()">Nearby</button>');
 }

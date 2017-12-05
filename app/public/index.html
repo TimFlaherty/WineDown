@@ -46,32 +46,33 @@
 		</div>
 	</nav>
 
-	<!-- Filter dropdowns -->
+	<!-- Filtration -->
+	<div class="container-fluid">
+		<div class="row navbg">
+			<div class="col text-center">
+				<select id="opts" class="custom-select w-100" onchange="filter()">
+					<option disabled selected>Filter by Varietal</option>
+					<option value="all">All Varietals</option>						
+				</select>
+			</div>
+			<div class="col text-center">
+				<select id="optnames" class="custom-select w-100" onchange="filterWineryName()">
+					<option disabled selected>Filter by Winery</option>
+					<option value="all">All Wineries</option>
+				</select>
+			</div>
+			<div class="col text-center">
+				<div id="listbtn"><button class="btn btn-outline-light w-100" onclick="nearby()">List Nearby Wineries</button></div>
+			</div>
+		</div>
+	</div>
+
 	<div id="maptainer" class="container-fluid">
 		<div id="pagerow" class="row">
-			<div class="left col">
-				<div class="row">
-					<h5>Filter by Varietal</h5>
-				</div>
-				<div class="row">
-					<select id="opts" onchange="filter()">
-						<option value="all">All Varietals</option>						
-					</select>
-				</div>
-				<div class="row">
-					<h5>Filter by Winery</h5>
-				</div>
-				<div class="row">
-					<select id="optnames" onchange="filterWineryName()">
-						<option value="all">All Wineries</option>
-					</select>
-				</div>
-				<div class="row">
-					<div id="listbtn"><button class="btn btn-outline-success" onclick="nearby()">List Nearby Wineries</button></div>
-				</div>
+			<div class="left col col-lg-4 col-xl-4 hideleft">
 				<div id="list"></div>
 			</div>
-			<div id="map" class="col-12 col-lg-auto"></div>
+			<div id="map" class="col"></div>
 			<div class="right col">Ads?</div>
 		</div>
 	</div>
