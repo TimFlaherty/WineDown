@@ -135,7 +135,9 @@ function mapit() {
 // WINERY PINS
 // AJAX request to node server returns an array of winery data 
 function pins(x) {
-	markers.clearLayers();
+	if($('.left').hasClass('hideleft')) {
+		markers.clearLayers();
+	}
 	$.ajax({
 		url: '/winerypins?' + x,
 		type: 'get',
@@ -205,7 +207,7 @@ function filter() {
 	pins('varietal=' + $('#opts').val());
 }
 function filterWineryName() {
-	pins('wineryname=' + $('#optnames').val());
+	pins('wineryname=' + encodeURIComponent($('#optnames').val()));
 }
 
 //Displays list of nearby wineries
@@ -216,8 +218,11 @@ function nearby() {
 		$('.left').removeClass('hideleft');
 		$('#map').addClass('listmap');
 		$('#list').html('');
+		markers.clearLayers();
 		for (i=0;i<data.length;i++) {
-			var maplink = '"wineryname='+encodeURI(data[i].wineryname)+'"';
+			var maplink = '"wineryname='+encodeURIComponent(data[i].wineryname).replace(/'/g, "%27")+'"';
+			pins('wineryname='+encodeURIComponent(data[i].wineryname).replace(/'/g, "%27"));
+			
 			$('#listbtn').html('<button class="btn btn-outline-light w-100" onclick="nolist()">Hide</button>');
 			//If there is no winery rating available, display message
 			var rating = data[i].wineryrating;
@@ -232,7 +237,7 @@ function nearby() {
 
 			$('#list').append("<div class='row entry'><div class='col-lg-6'><a href='winery?wineryid="+data[i].wineryid+"'><h3>"+data[i].wineryname+"</h3></a>"
 				+ data[i].distance + "&nbsp;Miles Away<br>"
-				+ "<a href='#' onclick='pins("+maplink+"); if($(window).width()<768){nolist();}'>Show on Map</a><br>"
+				+ "<a href='#' onclick='markers.clearLayers(); pins("+maplink+"); if($(window).width()<768){showpin();}'>Show on Map</a><br>"
 				+ "<b>WineDown Rating: </b><br>"
 				+ rating
 				+ "</div><div class='col-lg-6'><b>Tasting Room Hours:</b><br>" 
@@ -246,6 +251,15 @@ function nearby() {
 
 //Closes list
 function nolist() {
+	$('#list').html('');
+	$('#map').removeClass('listmap');
+	$('.left').addClass('hideleft');
+	$('#listbtn').html('<button class="btn btn-outline-light w-100" onclick="nearby()">Nearby</button>');
+	pins('varietal=all');
+}
+
+//Closes list to show specific pin
+function showpin() {
 	$('#list').html('');
 	$('#map').removeClass('listmap');
 	$('.left').addClass('hideleft');
