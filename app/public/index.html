@@ -41,32 +41,31 @@
 				<li class="nav-item">
 					<a class="nav-link" href="#">Help</a>
 				</li>
-				<li class="nav-item">
-					<li class="navbar">
-						<select id="opts" onchange="filter()">
-							<option value="all">All Varietals</option>						
-						</select>
-					</li>
-				</li>
-				<li class="nav-item">
-					<li class="navbar">
-						<select id="optnames" onchange="filterWineryName()">
-							<option value="all">All Wineries</option>
-						</select>
-					</li>
-				</li>
 			</ul>
 			<div id="login"></div>
 		</div>
 	</nav>
+	
+	<!-- Filteration -->
+	<div class="container">
+		<div class="row">
+			<div class="col-6 col-sm-2 col-md-3 col-lg-2" align="center">
+				<select id="opts" onchange="filter()" style="width: 120px;">
+					<option value="all">All Varietals</option>						
+				</select>
+			</div>
+			<div class="col-6 col-sm-2 col-md-3 col-lg-2" align="center">
+				<select id="optnames" onchange="filterWineryName()" style="width: 120px;">
+					<option value="all">All Wineries</option>
+				</select>
+			</div>
+		</div>
+	</div>
 
-	<!-- Filter dropdowns -->
+	<!-- Map -->
 	<div id="maptainer" class="container-fluid">
 		<div id="pagerow" class="row">
 			<div id="map" class="col-12 col-lg-auto"></div>
-			<div class="left col-lg-auto">
-				<div class="right col">Ads?</div>
-			</div>
 		</div>
 	</div>
 

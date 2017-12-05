@@ -29,7 +29,7 @@ body {
 
 #map {
 	display:inline-block;
-	width:80%;
+	width:100%; /* 80%;*/
 	height:100%;
 	z-index:1;
 }
