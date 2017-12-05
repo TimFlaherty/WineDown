@@ -112,6 +112,8 @@ function pins(x) {
 		type: 'get',
 	}).done(function (data) {
 		for (i = 0; i < data.length; i++) {
+			var linkaddr = data[i].address.split(' ').join('+');
+			
 			//If there is no winery rating available, display message
 			var rating = data[i].wineryrating;
 			if (rating == null) {
@@ -132,10 +134,10 @@ function pins(x) {
 				+ "<br><br><b>WineDown Rating: </b><br>"
 				+ rating
 				+ "<br><br><a href='https://www.google.com/maps/dir/?api=1&destination=" 
-				+ escape(data[i].address)
-				+ "&target='_blank'>Directions</a>"
+				+ linkaddr
+				+ "' target='_blank'>Directions</a>"
 				);
-
+			
 			markers.addLayer(marker);
 			map.addLayer(markers);
 		};
