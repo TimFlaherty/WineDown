@@ -132,9 +132,8 @@ function pins(x) {
 				+ "<br><br><b>WineDown Rating: </b><br>"
 				+ rating
 				+ "<br><br><a href='https://www.google.com/maps/dir/?api=1&destination=" 
-				+ escape(data[i].wineryname) + ",+"  
 				+ escape(data[i].address)
-				+ "'target='_blank'>Directions</a>"
+				+ "&target='_blank'>Directions</a>"
 				);
 
 			markers.addLayer(marker);
