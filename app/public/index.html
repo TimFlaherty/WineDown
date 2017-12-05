@@ -50,13 +50,13 @@
 	<div class="container-fluid">
 		<div class="row navbg">
 			<div class="col text-center">
-				<select id="opts" class="custom-select w-100" onchange="filter()">
+				<select id="opts" class="custom-select w-100" onchange="markers.clearLayers(); filter();">
 					<option disabled selected>Varietals</option>
 					<option value="all">All Varietals</option>						
 				</select>
 			</div>
 			<div class="col text-center">
-				<select id="optnames" class="custom-select w-100" onchange="filterWineryName()">
+				<select id="optnames" class="custom-select w-100" onchange="markers.clearLayers(); filterWineryName();">
 					<option disabled selected>Wineries</option>
 					<option value="all">All Wineries</option>
 				</select>
