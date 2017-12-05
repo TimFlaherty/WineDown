@@ -45,27 +45,35 @@
 			<div id="login"></div>
 		</div>
 	</nav>
-	
-	<!-- Filteration -->
+
+	<!-- Filtration -->
 	<div class="container-fluid">
-		<div class="row navbar">
-			<div class="col-6 col-sm-3 col-md-3 col-lg-3 col-xl-2" align="center">
-				<select id="opts" onchange="filter()" style="width: 120px;">
+		<div class="row navbg">
+			<div class="col text-center">
+				<select id="opts" class="custom-select w-100" onchange="filter()">
+					<option disabled selected>Varietals</option>
 					<option value="all">All Varietals</option>						
 				</select>
 			</div>
-			<div class="col-6 col-sm-3 col-md-3 col-lg-3 col-xl-2" align="center">
-				<select id="optnames" onchange="filterWineryName()" style="width: 120px;">
+			<div class="col text-center">
+				<select id="optnames" class="custom-select w-100" onchange="filterWineryName()">
+					<option disabled selected>Wineries</option>
 					<option value="all">All Wineries</option>
 				</select>
+			</div>
+			<div class="col text-center">
+				<div id="listbtn"><button class="btn btn-outline-light w-100" onclick="nearby()">Nearby</button></div>
 			</div>
 		</div>
 	</div>
 
-	<!-- Map -->
 	<div id="maptainer" class="container-fluid">
 		<div id="pagerow" class="row">
-			<div id="map" class="col-12 col-lg-auto"></div>
+			<div class="left col col-lg-4 col-xl-4 hideleft">
+				<div id="list"></div>
+			</div>
+			<div id="map" class="col"></div>
+			<div class="right col">Ads?</div>
 		</div>
 	</div>
 
