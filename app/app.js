@@ -95,7 +95,7 @@ app.get('/winerypins', function (req, res) {
 	if (req.query.varietal !== undefined) {	//for varietal filter
 		var varietal = req.query.varietal;
 		if (varietal == 'all') {
-			connection.query('SELECT * FROM winerypins', function (err, rows, fields) {
+			connection.query('SELECT * FROM winerypins GROUP BY wineryid', function (err, rows, fields) {
 				res.send(rows);
 			})
 		} else {
@@ -107,11 +107,11 @@ app.get('/winerypins', function (req, res) {
 	else if (req.query.wineryname !== undefined){ //for wineryname filter
 		var wineryname = req.query.wineryname; 
 		if (wineryname == 'all') {
-			connection.query('SELECT * FROM winerypins', function (err, rows, fields) {
+			connection.query('SELECT * FROM winerypins GROUP BY wineryid', function (err, rows, fields) {
 				res.send(rows);
 			})
 		} else {
-			connection.query('SELECT * FROM winerypins WHERE wineryname="' + wineryname +'"', function (err, rows, fields) {
+			connection.query('SELECT * FROM winerypins WHERE wineryname="' + wineryname +'" GROUP BY wineryid', function (err, rows, fields) {
 				res.send(rows);
 			})
 		}
@@ -160,8 +160,6 @@ app.post('/review', function (req, res) {
 	var wineryid = req.body.wineryid;
 	var rating = req.body.rating;
 	var narrative = req.body.narrative;
-	console.log('newone');
-	console.log(wineryid);
 	//Differentiate between wine and winery reviews
 	if (wineid == 'none') {
 		var sql = 'INSERT INTO review(wineid, wineryid, uid, rating, narrative, rvwdate, rvwtime) VALUES (NULL, "' + wineryid + '", "' + uid + '", "' + rating + '", "' + narrative + '", CURDATE(), CURTIME())';
@@ -211,7 +209,7 @@ app.get('/nearby', function (req, res) {
 		+ 'ROUND(3959 * acos(cos(radians(' + req.query.lat
 		+ ')) * cos(radians(lat)) * cos(radians(lng) - radians(' + req.query.long
 		+ ')) + sin(radians(' + req.query.lat + ')) * sin(radians(lat ))), 1) AS distance '
-		+ 'FROM winerypins GROUP BY wineryid ORDER BY distance LIMIT 5;';
+		+ 'FROM winerypins GROUP BY wineryid ORDER BY distance LIMIT 5';
 	connection.query(sql, function(err, rows, fields) {
 		res.send(rows);
 	});
@@ -231,4 +229,5 @@ http.createServer(app).listen(3000);
 
 //Serve to local network on port 8000:
 //app.listen(8000, '192.168.0.7');
+
 
