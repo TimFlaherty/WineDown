@@ -1,6 +1,5 @@
 //Check if user is logged in and load appropriate button
 function logcheck(id1, id2){
-	id1 = parseInt(id1);
 	$.ajax({url: '/logcheck', 
 		type: 'get'
 	}).done(function (data) {
@@ -50,6 +49,7 @@ function winervws(id) {
 			$('#rvwtarget').html('Be the first to review!');
 			$('#rvwtarget').css('height', '100px');
 		} else {
+			$('#rvwtarget').html('');
 			for (i=0;i<data.length;i++) {
 				var rating = data[i].rating;
 				if (rating == null) {
@@ -82,7 +82,7 @@ function login(id1, id2){
 		}
 	}).done(function (data) {
 		if(data == true) {
-			$("#login").html('<button class="btn btn-outline-danger my-2 my-sm-0" onclick="logout()">Log Out</button>');
+			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
 			$("#rating").show();
 			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="winereview('+id1+', '+id2+')">Rate It!</button>');
 			modclose();

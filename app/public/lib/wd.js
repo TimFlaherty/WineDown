@@ -24,7 +24,7 @@ function login(){
 		}
 	}).done(function (data) {
 		if(data == true) {
-			$("#login").html('<button class="btn btn-outline-danger my-2 my-sm-0" onclick="logout()">Log Out</button>');
+			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
 			modclose();
 		} else {
 			$("#resultmsg").html(data);

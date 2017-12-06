@@ -111,7 +111,7 @@ function login(){
 		}
 	}).done(function (data) {
 		if(data == true) {
-			$("#login").html('<button class="btn btn-outline-danger my-2 my-sm-0" onclick="logout()">Log Out</button>');
+			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
 			$("#rating").show();
 			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="wineryreview()">Rate It!</button>');
 			modclose();
