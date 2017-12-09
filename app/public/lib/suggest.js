@@ -30,6 +30,7 @@ function suggestwine(){
 	var winery = $("#wineryName").val();
 	var vint = $("#vintage").val();
 	var vari = $("#varietal").val();
+	if(vint==''){vint=0};
 	$.ajax({url: '/suggestwine', 
 		type: 'post',
 		data: {
@@ -38,7 +39,6 @@ function suggestwine(){
 			vintage: vint,
 			varietal: vari
 		}
-		console.log(data);
 	}).done(function (data) {
 		if(data == true) {
 			alert('Thank you for your suggestion!');
