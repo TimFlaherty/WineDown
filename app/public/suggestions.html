@@ -11,6 +11,7 @@
 	<link rel="icon" type="image/ico" href="images/favicon.ico">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="lib/wd.js"></script>
+	<script src="lib/suggest.js"></script>
 </head>
 
 <body>
@@ -57,7 +58,7 @@
 				<button type="button" class="btn btn-outline-success btn-block btn-lg text-center" data-toggle="collapse" data-target="#suggest-winery" style="margin-top: 10px; margin-bottom: 10px;">add your favorite winery</button>
 				<div id="suggest-winery" class="collapse" style="margin-bottom: 10px;">
 					<div class="form-group">
-						<input type="text" class="form-control" id="wineryname" placeholder="Name:">
+						<input type="text" class="form-control" id="wineryname" placeholder="Name of the winery:">
 					</div>
 					<div class="form-group">
 						<input type="text" class="form-control" id="address" placeholder="Address:">
@@ -71,7 +72,7 @@
 					<div class="form-group">
 						<input type="text" class="form-control" id="phone" placeholder="Phone number:">
 					</div>
-					<button type="submit" class="btn btn-outline-success">Submit</button>
+					<button type="submit" class="btn btn-outline-success" onclick="suggestwinery()">Submit</button>
 				</div>
 
 				<button type="button" class="btn btn-outline-success btn-text btn-block btn-lg text-center" data-toggle="collapse" data-target="#suggest-wine" style="margin-top: 10px; margin-bottom: 10px;">add your favorite wine</button>
@@ -89,7 +90,7 @@
 					<div class="form-group">
 						<input type="text" class="form-control" id="varietal" placeholder="Varietal:">
 					</div>
-					<button type="submit" class="btn btn-outline-success btn-text">Submit</button>
+					<button type="submit" class="btn btn-outline-success btn-text" onclick="suggestwine()">Submit</button>
 				</div>
 				
 				
