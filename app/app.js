@@ -215,6 +215,39 @@ app.get('/nearby', function (req, res) {
 	});
 });
 
+//Suggest winery
+app.post('/suggestwinery', function (req, res) {
+	var name = req.body.name;
+	var address = req.body.address;
+	var hours = req.body.hours;
+	var url = req.body.url;
+	var phone = req.body.phone;
+	var sql = 'INSERT INTO suggestwinery VALUES ("'+name+'", "'+address+'", "'+hours+'", "'+url+'", "'+phone+'")'
+	connection.query(sql, function (err, rows, fields) {
+		if (err) {
+			res.send('Something went wrong, sorry!')
+		} else {
+			res.send(true);
+		}
+	});
+});
+
+//Suggest wine
+app.post('/suggestwine', function (req, res) {
+	var winename = req.body.winename;
+	var wineryname = req.body.wineryname;
+	var vintage = req.body.vintage;
+	var varietal = req.body.varietal;
+	var sql = 'INSERT INTO suggestwine VALUES ("'+winename+'", "'+wineryname+'", '+vintage+', "'+varietal+'")'
+	connection.query(sql, function (err, rows, fields) {
+		if (err) {
+			res.send('Something went wrong, sorry!')
+		} else {
+			res.send(true);
+		}
+	});
+});
+
 //Static file server for files in the /public folder
 app.use(express.static(__dirname + '/public'));
 
