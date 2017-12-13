@@ -132,12 +132,20 @@ function modclose() {
 	$('#logmod').modal('hide');
 	$('#resultmsg').html('');
 	$('#addfield').html('');
-	$("#modbutton").html('<button type="button" class="btn btn-light" onclick="login()">Login</button>');
+	$("#modbutton").html('<button type="submit" class="btn btn-light">Login</button>');
 }
 
 //Displays user signup dialog in modal box
 function create() {
 	$("#resultmsg").html('');
-	$("#addfield").html('<br><h6>Email</h6><input type="text" class="form-control" placeholder="Enter Email" id="email" required>');
-	$("#modbutton").html('<button class="btn btn-light" onclick="signup()">Sign Up</button>');
+	$("#addfield").html('<br><h6>Email</h6><input type="email" class="form-control" placeholder="Enter Email" id="email" required>');
+	$("#modbutton").html('<button type="submit" class="btn btn-light">Sign Up</button>');
 }	
+
+function handlelogin() {
+	if ($("#addfield").html() == '') {
+		login();
+	} else {
+		signup();
+	};
+}
