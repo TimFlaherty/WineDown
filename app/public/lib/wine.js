@@ -32,7 +32,7 @@ function winereview(id1, id2){
 		}
 	}).done(function (data) {
 		if(data == true) {
-			$("#reviewbtn").html('COOL');
+			$("#reviewbtn").html('Thank you for reviewing!');
 		} else {
 			$("#reviewbtn").html(data);
 		}

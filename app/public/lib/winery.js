@@ -33,7 +33,7 @@ function wineryreview(id){
 		}
 	}).done(function (data) {
 		if(data == true) {
-			$("#reviewbtn").html('COOL');
+			$("#reviewbtn").html('Thank you for reviewing!');
 		} else {
 			$("#reviewbtn").html(data);
 		}
