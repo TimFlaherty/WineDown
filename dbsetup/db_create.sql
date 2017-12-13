@@ -48,6 +48,21 @@ FOREIGN KEY (wineryid) REFERENCES winery(wineryid),
 FOREIGN KEY (uid) REFERENCES usr(uid)
 );
 
+CREATE TABLE suggestwinery (
+wineryname VARCHAR(40) NOT NULL,
+address VARCHAR(256) NOT NULL,
+hours VARCHAR(256),
+url VARCHAR(2083),
+phone VARCHAR(15)
+);
+
+CREATE TABLE suggestwine (
+winename VARCHAR(50),
+wineryname VARCHAR(40) NOT NULL,
+vintage INT(4),
+varietal VARCHAR(30) NOT NULL
+);
+
 CREATE VIEW winerating AS
 	SELECT wineid,
 	wineryid,	
