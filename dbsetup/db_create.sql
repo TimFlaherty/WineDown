@@ -146,6 +146,8 @@ CREATE VIEW profile AS
 	DATE_FORMAT(b.rvwdate, "%M %d, %Y") AS rvwdate,
 	b.narrative,
 	c.winename,
+	c.vintage,
+	c.varietal,
 	d.wineryname
 	FROM usr a
 	JOIN review b
