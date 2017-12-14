@@ -9,7 +9,11 @@ function userrvws(id) {
 		} else {
 			$("#rvwnum").text(data.length);
 			for (i=0;i<data.length;i++) {
-				var wineurl = '<a href="wine?wineid='+data[i].wineid+'">'+data[i].winename+'</a>';
+				var winename = data[i].winename;
+				if (winename == 'NULL') {
+					winename = data[i].vintage +' '+data[i].varietal;
+				};
+				var wineurl = '<a href="wine?wineid='+data[i].wineid+'">'+winename+'</a>';
 				var wineryurl = '<a href="winery?wineryid='+data[i].wineryid+'">'+data[i].wineryname+'</a>';
 				var wname = wineurl + ' by ' + wineryurl;
 				var wineid = data[i].wineid;
