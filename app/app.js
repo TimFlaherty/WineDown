@@ -191,7 +191,7 @@ app.get('/winervw', function (req, res) {
 
 //Route and serve user data to profile page template
 app.get('/user', function (req, res) {
-	connection.query('SELECT uid, uname FROM usr WHERE uname = "' + req.query.uname + '"', function (err, rows, fields) {
+	connection.query('SELECT uid, uname FROM usr WHERE uid = "' + req.query.userid + '"', function (err, rows, fields) {
 		res.render(__dirname + '/public/user.html', rows[0]);
 	});
 });
