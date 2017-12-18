@@ -9,7 +9,7 @@ function logcheck(id){
 			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" data-toggle="modal" data-target="#logmod">Login</button>');
 			$("#rating").hide();
 			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#logmod">Login to Review</button>');
-		} else if (data == true){
+		} else if (typeof data == 'string'){
 			$("#login").html(
 				'<a href="/user?userid='+data+'" id="profilelink"><button class="btn btn-outline-light my-2 my-sm-0">My Profile</button></a>' +
 				'<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>'
@@ -114,16 +114,10 @@ function login(){
 			pwd: pass
 		}
 	}).done(function (data) {
-		if(data == true) {
-			$("#login").html(
-				'<a href="/user?userid='+data+'" id="profilelink"><button class="btn btn-outline-light my-2 my-sm-0">My Profile</button></a>' +
-				'<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>'
-			);
-			$("#rating").show();
-			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="wineryreview()">Rate It!</button>');
-			modclose();
-		} else {
-			$("#resultmsg").html(data);
+		if(typeof data == 'string') {
+			location.reload();
+		} else if (data == false) {
+			$("#resultmsg").html("Incorrect Password");
 		}
 	});
 }
@@ -152,10 +146,7 @@ function signup(){
 		}
 	}).done(function (data) {
 		if(data == true) {
-			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" style="width:auto;" onclick="logout()">Log Out</button>');
-			window.alert('Welcome to WineDown!');
-			logcheck();
-			modclose();
+			location.reload();
 		} else {
 			$("#resultmsg").html(data);
 		}
