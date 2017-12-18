@@ -3,8 +3,11 @@
 		$.ajax({url: '/logcheck', 
 			type: 'get'
 		}).done(function (data) {
-			if (data == true) {
-				$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
+			if (typeof data == 'string') {
+				$("#login").html(
+					'<a href="/user?userid='+data+'" id="profilelink"><button class="btn btn-outline-light my-2 my-sm-0">My Profile</button></a>' +
+					'<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>'
+				);
 			} else if (data == false){
 				$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" data-toggle="modal" data-target="#logmod">Login</button>');
 			}
@@ -23,11 +26,14 @@ function login(){
 			pwd: pass
 		}
 	}).done(function (data) {
-		if(data == true) {
-			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
+		if(typeof data == 'string') {
+			$("#login").html(
+				'<a href="/user?userid='+data+'" id="profilelink"><button class="btn btn-outline-light my-2 my-sm-0">My Profile</button></a>' +
+				'<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>'
+			);
 			modclose();
-		} else {
-			$("#resultmsg").html(data);
+		} else if (data == false) {
+			$("#resultmsg").html("Incorrect Password");
 		}
 	});
 }
@@ -61,7 +67,7 @@ function signup(){
 			logcheck();
 			modclose();
 		} else {
-			$("#resultmsg").html(data);
+			$("#resultmsg").html('Username already taken, sorry!');
 		}
 	});
 }
@@ -85,6 +91,6 @@ function handlelogin() {
 	if ($("#addfield").html() == '') {
 		login();
 	} else {
-		console.log('signup');
+		signup();
 	};
 }

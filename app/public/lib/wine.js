@@ -9,7 +9,10 @@ function logcheck(id1, id2){
 			$("#rating").hide();
 			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#logmod">Login to Review</button>');
 		} else if (data == true){
-			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
+			$("#login").html(
+				'<a href="/user?userid='+data+'" id="profilelink"><button class="btn btn-outline-light my-2 my-sm-0">My Profile</button></a>' +
+				'<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>'
+			);
 			$("#rating").show();
 			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="winereview('+id1+', '+id2+')">Rate It!</button>');
 		}
@@ -58,7 +61,7 @@ function winervws(id) {
 				$('#rvwtarget').append('<div class="rvwrow"><div class="row">'
 					+'<div class="rating col-4"><h5><b>Rating: </b>'
 					+rating+'</h5></div>'
-					+'<div class="uname col-4"><a href="user?uname='+data[i].uname+'">'
+					+'<div class="uname col-4"><a href="user?userid='+data[i].uid+'">'
 					+data[i].uname+'</a></div><div class="rvwdate col-4">'
 					+data[i].rvwdate+'</div></div><div class="narrative row col">'
 					+data[i].narrative+'</div></div>'
@@ -82,7 +85,10 @@ function login(id1, id2){
 		}
 	}).done(function (data) {
 		if(data == true) {
-			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
+			$("#login").html(
+				'<a href="/user?userid='+data+'" id="profilelink"><button class="btn btn-outline-light my-2 my-sm-0">My Profile</button></a>' +
+				'<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>'
+			);
 			$("#rating").show();
 			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="winereview('+id1+', '+id2+')">Rate It!</button>');
 			modclose();

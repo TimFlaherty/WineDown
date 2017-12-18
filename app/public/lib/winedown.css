@@ -22,6 +22,10 @@ body {
 	padding-bottom:10px;
 }
 
+#profilelink {
+	padding:5px;
+}
+
 #maptainer {
 	width:100%;
 	height:85vh;
