@@ -65,9 +65,9 @@ app.post('/login', function (req, res) {
 			bcrypt.compare(pwd, rows[0].pwd, function (err, match) {
 				if (match == true) {
 					var uid = rows[0].uid;
-					res.cookie('winedown', { user: uid }).send(true);
+					res.cookie('winedown', { user: uid }).send(uid);
 				} else {
-					res.send('Incorrect Password');
+					res.send(false);
 				}
 			});
 		}
@@ -81,9 +81,10 @@ app.get('/logout', function (req, res) {
 
 //Checks for user cookie and sends appropriate button
 app.get('/logcheck', function (req, res) {
-	var cookies = JSON.stringify(req.cookies);
-	if (cookies.includes('winedown')) {
-		res.send(true);
+	var chip = JSON.stringify(req.cookies);
+	if (chip.includes('winedown')) {
+		var packet = req.cookies.winedown.user.toString();
+		res.send(packet);
 	} else {
 		res.send(false);
 	}
@@ -191,7 +192,7 @@ app.get('/winervw', function (req, res) {
 
 //Route and serve user data to profile page template
 app.get('/user', function (req, res) {
-	connection.query('SELECT uid, uname FROM usr WHERE uname = "' + req.query.uname + '"', function (err, rows, fields) {
+	connection.query('SELECT uid, uname FROM usr WHERE uid = "' + req.query.userid + '"', function (err, rows, fields) {
 		res.render(__dirname + '/public/user.html', rows[0]);
 	});
 });

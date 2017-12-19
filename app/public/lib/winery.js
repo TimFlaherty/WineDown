@@ -9,8 +9,11 @@ function logcheck(id){
 			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" data-toggle="modal" data-target="#logmod">Login</button>');
 			$("#rating").hide();
 			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#logmod">Login to Review</button>');
-		} else if (data == true){
-			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
+		} else if (typeof data == 'string'){
+			$("#login").html(
+				'<a href="/user?userid='+data+'" id="profilelink"><button class="btn btn-outline-light my-2 my-sm-0">My Profile</button></a>' +
+				'<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>'
+			);
 			$("#rating").show();
 			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="wineryreview('+id+')">Rate It!</button>');
 		}
@@ -50,6 +53,7 @@ function wineryrvws(id) {
 			$('#rvwtarget').html('Be the first to review!');
 			$('#rvwtarget').css('height', '100px');
 		} else {
+			$('#rvwtarget').html('');
 			for (i=0;i<data.length;i++) {
 				var rating = data[i].rating;
 				if (rating == null) {
@@ -58,7 +62,7 @@ function wineryrvws(id) {
 				$('#rvwtarget').append('<div class="rvwrow"><div class="row">'
 					+'<div class="rating col-4"><h5><b>Rating: </b>'
 					+rating+'</h5></div>'
-					+'<div class="uname col-4"><a href="user?uname='+data[i].uname+'">'
+					+'<div class="uname col-4"><a href="user?userid='+data[i].uid+'">'
 					+data[i].uname+'</a></div><div class="rvwdate col-4">'
 					+data[i].rvwdate+'</div></div><div class="narrative row col">'
 					+data[i].narrative+'</div></div>'
@@ -110,13 +114,10 @@ function login(){
 			pwd: pass
 		}
 	}).done(function (data) {
-		if(data == true) {
-			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" onclick="logout()">Log Out</button>');
-			$("#rating").show();
-			$("#reviewbtn").html('<button class="btn btn-outline-success my-2 my-sm-0" onclick="wineryreview()">Rate It!</button>');
-			modclose();
-		} else {
-			$("#resultmsg").html(data);
+		if(typeof data == 'string') {
+			location.reload();
+		} else if (data == false) {
+			$("#resultmsg").html("Incorrect Password");
 		}
 	});
 }
@@ -145,10 +146,7 @@ function signup(){
 		}
 	}).done(function (data) {
 		if(data == true) {
-			$("#login").html('<button class="btn btn-outline-light my-2 my-sm-0" style="width:auto;" onclick="logout()">Log Out</button>');
-			window.alert('Welcome to WineDown!');
-			logcheck();
-			modclose();
+			location.reload();
 		} else {
 			$("#resultmsg").html(data);
 		}
